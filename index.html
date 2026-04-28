@@ -287,7 +287,7 @@
     }
 
     .board-wrap {
-      border: 1px solid #777;
+      border: 2px solid #222;
       display: inline-block;
       width: 100%;
       background: #fff;
@@ -304,13 +304,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 26px; /* Increased font size for better visibility */
       user-select: none;
       position: relative;
       width: 100%;
       height: 100%;
-      overflow: hidden;
-      line-height: 1; /* Reset line-height to prevent vertical displacement */
+    }
+
+    .piece-char {
+      font-size: 30px;
+      line-height: 1;
+      display: block;
+      transform: translateY(-5%);
+      pointer-events: none;
+      z-index: 1;
     }
 
     .light { background: #f0d9b5; }
@@ -321,8 +327,8 @@
       font-size: 7px;
       line-height: 1;
       font-weight: 600;
-      opacity: 0.75;
-      z-index: 2; /* Ensure coordinates are above background colors */
+      opacity: 0.6;
+      z-index: 0;
     }
 
     .coord.file {
@@ -340,6 +346,7 @@
       font-size: 10px;
       color: #333;
       text-align: center;
+      font-weight: 500;
     }
 
     .empty-state {
@@ -458,6 +465,7 @@
   const files = ['a','b','c','d','e','f','g','h'];
 
   function isValidFen(fen) {
+    if (!fen || fen.trim() === '') return false;
     try {
       const chess = new Chess();
       return chess.load(fen.trim());
@@ -486,7 +494,7 @@
     const rows = expandFenBoard(boardPart);
     
     let html = '<div class=\"puzzle\">';
-    html += `<div class=\"puzzle-meta\"><span>Puzzle ${index + 1}</span><span>${turn === 'w' ? 'White' : 'Black'} to move</span></div>`;
+    html += `<div class=\"puzzle-meta\"><span>Puzzle \${index + 1}</span><span>\${turn === 'w' ? 'White' : 'Black'} to move</span></div>`;
     html += '<div class=\"board-wrap\"><div class=\"board\">';
 
     for (let r = 0; r < 8; r++) {
@@ -498,15 +506,18 @@
         const showFile = r === 7;
         const showRank = c === 0;
 
-        html += `<div class=\"square ${isLight ? 'light' : 'dark'}\">${pieces[piece] || ''}`;
-        if (showFile) html += `<span class=\"coord file\">${file}</span>`;
-        if (showRank) html += `<span class=\"coord rank\">${rank}</span>`;
+        html += `<div class=\"square \${isLight ? 'light' : 'dark'}\">`;
+        if (piece) {
+          html += `<span class=\"piece-char\">\${pieces[piece]}</span>`;
+        }
+        if (showFile) html += `<span class=\"coord file\">\${file}</span>`;
+        if (showRank) html += `<span class=\"coord rank\">\${rank}</span>`;
         html += '</div>';
       }
     }
 
     html += '</div></div>';
-    html += `<div class=\"side-to-move\">${turn === 'w' ? 'White to move' : 'Black to move'}</div>`;
+    html += `<div class=\"side-to-move\">\${turn === 'w' ? 'White to move' : 'Black to move'}</div>`;
     html += '</div>';
     return html;
   }
@@ -516,26 +527,26 @@
     const phone = phoneInput.value.trim() || 'Add phone number';
     const subtitle = subtitleInput.value.trim() || 'Solve the positions below.';
     
-    const rawFens = fenInput.value.split('\
-').map(line => line.trim()).filter(Boolean);
+    const rawFens = fenInput.value.split(/\
+|\\r/).map(line => line.trim()).filter(Boolean);
     const validFens = rawFens.filter(isValidFen).slice(0, 9);
     const invalidCount = rawFens.length - validFens.length;
 
-    let html = `
+    let html = \`
       <div class=\"worksheet-header\">
         <div>
-          ${logoDataUrl ? `<img src=\"${logoDataUrl}\" alt=\"Academy logo\" class=\"print-logo show\">` : '<div class=\"logo-fallback\">ACADEMY LOGO</div>'}
+          \${logoDataUrl ? \`<img src=\"\${logoDataUrl}\" alt=\"Academy logo\" class=\"print-logo show\">\` : '<div class=\"logo-fallback\">ACADEMY LOGO</div>'}
         </div>
         <div class=\"title-block\">
-          <div class=\"worksheet-title\">${escapeHtml(title)}</div>
-          <div class=\"worksheet-subtitle\">${escapeHtml(subtitle)}</div>
+          <div class=\"worksheet-title\">\${escapeHtml(title)}</div>
+          <div class=\"worksheet-subtitle\">\${escapeHtml(subtitle)}</div>
         </div>
         <div class=\"contact-block\">
           <div><strong>Contact</strong></div>
-          <div>${escapeHtml(phone)}</div>
+          <div>\${escapeHtml(phone)}</div>
         </div>
       </div>
-    `;
+    \`;
 
     if (validFens.length === 0) {
       html += '<div class=\"empty-state\"><h3>No valid FENs yet</h3><p>Paste one FEN per line in the left panel to build the worksheet preview.</p></div>';
@@ -545,7 +556,7 @@
         html += createBoardHTML(fen, index);
       });
       html += '</div>';
-      html += `<div class=\"footer-note\">Showing ${validFens.length} puzzle${validFens.length > 1 ? 's' : ''}${invalidCount > 0 ? ` • ${invalidCount} invalid line${invalidCount > 1 ? 's were' : ' was'} ignored` : ''}</div>`;
+      html += \`<div class=\"footer-note\">Showing \${validFens.length} puzzle\${validFens.length > 1 ? 's' : ''}\${invalidCount > 0 ? \\` • \${invalidCount} invalid line\${invalidCount > 1 ? 's were' : ' was'} ignored\\` : ''}</div>\`;
     }
 
     pagePreview.innerHTML = html;
@@ -556,7 +567,7 @@
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
-      .replace(/\"/g, '&quot;')
+      .replace(/\\\"/g, '&quot;')
       .replace(/'/g, '&#039;');
   }
 
@@ -571,7 +582,7 @@
     const reader = new FileReader();
     reader.onload = () => {
       logoDataUrl = reader.result;
-      logoPreviewBox.innerHTML = `<img src=\"${logoDataUrl}\" alt=\"Logo preview\">`;
+      logoPreviewBox.innerHTML = \`<img src=\"\${logoDataUrl}\" alt=\"Logo preview\">\`;
       renderWorksheet();
     };
     reader.readAsDataURL(file);
@@ -579,14 +590,14 @@
 
   document.getElementById('printBtn').addEventListener('click', () => window.print());
   document.getElementById('sampleBtn').addEventListener('click', () => {
-    fenInput.value = \`r1bqkbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R w KQkq - 2 4\
-2r3k1/5ppp/p2b4/1p1P4/1P6/P3R1P1/5P1P/4R1K1 w - - 0 1\
-6k1/5pp1/7p/8/8/5P2/5KPP/8 w - - 0 1\
-r4rk1/pp1n1ppp/2pbpn2/q7/3P4/2N1PN2/PPQ2PPP/R1B2RK1 w - - 0 1\
-8/8/3k4/3p4/3P4/3K4/8/8 w - - 0 1\
-6k1/1p3pp1/p6p/3P4/1P6/P5PP/5PK1/8 w - - 0 1\
-r2q1rk1/ppp2ppp/2n2n2/3bp3/3P4/2PB1N2/PP3PPP/RNBQ1RK1 w - - 0 1\
-8/2p5/1p1p4/p2Ppk2/P1P1P3/3K4/8/8 w - - 0 1\
+    fenInput.value = \`r1bqkbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R w KQkq - 2 4
+2r3k1/5ppp/p2b4/1p1P4/1P6/P3R1P1/5P1P/4R1K1 w - - 0 1
+6k1/5pp1/7p/8/8/5P2/5KPP/8 w - - 0 1
+r4rk1/pp1n1ppp/2pbpn2/q7/3P4/2N1PN2/PPQ2PPP/R1B2RK1 w - - 0 1
+8/8/3k4/3p4/3P4/3K4/8/8 w - - 0 1
+6k1/1p3pp1/p6p/3P4/1P6/P5PP/5PK1/8 w - - 0 1
+r2q1rk1/ppp2ppp/2n2n2/3bp3/3P4/2PB1N2/PP3PPP/RNBQ1RK1 w - - 0 1
+8/2p5/1p1p4/p2Ppk2/P1P1P3/3K4/8/8 w - - 0 1
 2r3k1/5pp1/p6p/1p1P4/1P3P2/P5P1/6KP/2R5 w - - 0 1\`;
     renderWorksheet();
   });
