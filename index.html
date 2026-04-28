@@ -1,134 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chess Worksheet Generator</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
-  <style>
-    :root {
-      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
-      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
-      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
-      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
-      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2rem);
-      --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3rem);
-      --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem; --space-12: 3rem;
-      --radius-sm: 0.375rem; --radius-md: 0.5rem; --radius-lg: 0.75rem;
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.08); --shadow-md: 0 8px 24px rgba(0,0,0,0.12);
-      --color-bg: #f7f4ee; --color-surface: #ffffff; --color-surface-2: #f1ece3;
-      --color-text: #211d18; --color-text-muted: #6a645d; --color-border: #d8d0c4;
-      --color-primary: #0b6b6f; --color-primary-hover: #095357; --color-accent: #d8b25f;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Worksheet Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    <style>
+        :root {
+            --primary: #0b6b6f;
+            --primary-hover: #095357;
+            --bg: #f7f4ee;
+            --surface: #ffffff;
+            --text: #211d18;
+            --text-muted: #6a645d;
+            --border: #d8d0c4;
+            --radius: 8px;
+        }
 
-    * { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; print-color-adjust: exact; }
-    body { margin: 0; font-family: 'Inter', sans-serif; font-size: var(--text-base); color: var(--color-text); background: linear-gradient(180deg, #f8f5ef 0%, #efe8dc 100%); }
-    h1, h2, h3, h4, p { margin: 0; }
-    button, input, textarea { font: inherit; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+        
+        .app { display: grid; grid-template-columns: 400px 1fr; height: 100vh; }
+        .sidebar { background: #fff; padding: 24px; border-right: 1px solid var(--border); overflow-y: auto; }
+        .preview { padding: 40px; overflow-y: auto; display: flex; justify-content: center; background: #e2e0d8; }
 
-    .app { display: grid; grid-template-columns: minmax(320px, 430px) 1fr; min-height: 100vh; }
-    .panel { background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); border-right: 1px solid var(--color-border); padding: var(--space-6); overflow: auto; }
-    .preview-wrap { padding: var(--space-6); overflow: auto; display: flex; justify-content: center; background: #e0ddd7; }
+        .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+        .brand svg { width: 32px; height: 32px; color: var(--primary); }
+        .brand h1 { font-family: 'Libre Baskerville', serif; font-size: 20px; margin: 0; }
 
-    .brand { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-6); }
-    .brand svg { width: 32px; height: 32px; color: var(--color-primary); }
-    .brand-title { font-family: 'Libre Baskerville', serif; font-size: var(--text-lg); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; }
+        input, textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; }
+        textarea { height: 180px; font-family: monospace; resize: vertical; }
 
-    .intro { color: var(--color-text-muted); font-size: var(--text-sm); margin-bottom: var(--space-6); line-height: 1.6; }
-    .form-group { margin-bottom: var(--space-5); }
-    label { display: block; font-weight: 600; margin-bottom: var(--space-2); font-size: var(--text-sm); }
-    input[type="text"], textarea { width: 100%; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); padding: 0.8rem 0.95rem; color: var(--color-text); }
-    textarea { min-height: 160px; resize: vertical; font-family: monospace; font-size: 13px; }
+        .actions { display: flex; gap: 12px; margin-top: 24px; }
+        .btn { padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary { background: #fff; border: 1px solid var(--border); }
 
-    .logo-upload { display: flex; gap: var(--space-3); align-items: center; }
-    .logo-preview-box { width: 64px; height: 64px; border: 1px dashed var(--color-border); border-radius: var(--radius-md); display: grid; place-items: center; background: var(--color-surface-2); font-size: 10px; color: var(--color-text-muted); text-align: center; }
-    .logo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        /* A4 Page */
+        .page { width: 210mm; min-height: 297mm; background: #fff; padding: 15mm; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: relative; color: #000; }
+        .header { display: grid; grid-template-columns: 100px 1fr 120px; align-items: center; gap: 20px; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px; }
+        .logo-box { width: 90px; height: 90px; border: 1px solid #ddd; display: grid; place-items: center; font-weight: bold; font-size: 10px; }
+        .logo-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .title-block { text-align: center; }
+        .title-block h2 { font-family: 'Libre Baskerville', serif; font-size: 28px; margin: 0 0 5px; }
+        .title-block p { font-size: 12px; color: #444; margin: 0; }
+        .contact { text-align: right; font-size: 12px; }
 
-    .actions { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-top: var(--space-6); }
-    .btn { border: none; border-radius: 999px; padding: 0.8rem 1.2rem; font-weight: 600; cursor: pointer; transition: 150ms ease; }
-    .btn-primary { background: var(--color-primary); color: #fff; }
-    .btn-secondary { background: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border); }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10mm 8mm; }
+        .puzzle { break-inside: avoid; }
+        .p-meta { display: flex; justify-content: space-between; font-weight: bold; font-size: 12px; border-bottom: 1px solid #eee; margin-bottom: 5px; padding-bottom: 2px; }
+        
+        .board-wrap { border: 2.5px solid #000; aspect-ratio: 1/1; position: relative; }
+        .board { display: grid; grid-template-columns: repeat(8, 1fr); height: 100%; }
+        .square { display: flex; align-items: center; justify-content: center; position: relative; }
+        
+        /* Green Theme */
+        .light { background: #ebecd0; }
+        .dark { background: #779556; }
+        
+        .piece { font-size: 48px; line-height: 1; z-index: 2; font-family: "Segoe UI Symbol", serif; }
+        .coord { position: absolute; font-size: 9px; font-weight: 900; font-family: monospace; z-index: 1; }
+        .coord.f { right: 2px; bottom: 1px; }
+        .coord.r { left: 2px; top: 1px; }
+        .light .coord { color: #779556; }
+        .dark .coord { color: #ebecd0; }
 
-    /* A4 Page Styles */
-    .page { width: 210mm; min-height: 297mm; background: white; padding: 12mm; color: #111; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; }
-    .worksheet-header { display: grid; grid-template-columns: 85px 1fr 100px; align-items: center; gap: 15px; border-bottom: 2.5px solid #111; padding-bottom: 10px; margin-bottom: 12px; }
-    .header-logo { width: 80px; height: 80px; object-fit: contain; }
-    .header-logo-placeholder { width: 80px; height: 80px; border: 1.5px solid #111; display: grid; place-items: center; font-weight: 800; font-size: 10px; text-align: center; padding: 5px; }
-    .title-block { text-align: center; }
-    .worksheet-title { font-family: 'Libre Baskerville', serif; font-size: 26px; margin-bottom: 4px; }
-    .worksheet-subtitle { font-size: 12px; color: #333; }
-    .contact-block { text-align: right; font-size: 11px; line-height: 1.4; }
+        .footer { margin-top: 30px; text-align: center; font-size: 10px; color: #888; border-top: 1px solid #eee; padding-top: 10px; }
+        .move-text { text-align: center; font-size: 11px; font-weight: 700; margin-top: 5px; background: #f9f9f9; border: 1px solid #eee; padding: 2px; }
 
-    .puzzle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10mm 8mm; }
-    .puzzle { break-inside: avoid; display: flex; flex-direction: column; }
-    .puzzle-meta { display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; margin-bottom: 3mm; border-bottom: 1px solid #eee; padding-bottom: 1mm; }
-    
-    .board-wrap { border: 2.5px solid #111; width: 100%; aspect-ratio: 1/1; background: #fff; position: relative; }
-    .board { display: grid; grid-template-columns: repeat(8, 1fr); height: 100%; }
-    .square { display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-    .piece-char { font-size: 48px; font-family: "Segoe UI Symbol", "Apple Color Emoji", "Noto Color Emoji", serif; line-height: 1; z-index: 2; pointer-events: none; }
-    
-    /* Green Theme */
-    .light { background: #ebecd0; }
-    .dark { background: #779556; }
-    
-    .coord { position: absolute; font-size: 9px; font-weight: 900; z-index: 1; font-family: monospace; }
-    .coord.file { right: 2px; bottom: 1px; }
-    .coord.rank { left: 2px; top: 1px; }
-    .light .coord { color: #779556; }
-    .dark .coord { color: #ebecd0; }
-
-    .side-to-move { margin-top: 3mm; font-size: 11px; font-weight: 700; text-align: center; background: #f4f4f4; padding: 2px; border-radius: 4px; border: 1px solid #ddd; }
-    
-    .footer-note { margin-top: 15px; text-align: center; font-size: 10px; color: #666; font-style: italic; border-top: 1px solid #eee; padding-top: 5px; }
-
-    @page { size: A4; margin: 0; }
-    @media print {
-      body { background: white; }
-      .panel { display: none; }
-      .preview-wrap { padding: 0; background: none; }
-      .page { box-shadow: none; margin: 0; width: 100%; }
-    }
-  </style>
+        @media print {
+            .sidebar { display: none; }
+            .preview { padding: 0; background: none; }
+            .page { width: 100%; box-shadow: none; margin: 0; padding: 10mm; }
+        }
+    </style>
 </head>
 <body>
-  <div class="app">
-    <div class="panel">
-      <div class="brand">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <div class="brand-title">Chess Worksheet</div>
-      </div>
-      
-      <div class="form-group">
-        <label>Worksheet Title</label>
-        <input id="worksheetTitle" type="text" value="EduChess Academy Puzzle Worksheet">
-      </div>
-
-      <div class="form-group">
-        <label>Phone / Contact</label>
-        <input id="academyPhone" type="text" value="+91 0000 0000 00">
-      </div>
-
-      <div class="form-group">
-        <label>Subtitle / Instructions</label>
-        <input id="academySubtitle" type="text" value="Solve the 9 positions. Determine the best move for the side indicated.">
-      </div>
-
-      <div class="form-group">
-        <label>Academy Logo</label>
-        <div class="logo-upload">
-          <input id="logoInput" type="file" accept="image/*">
-          <div id="logoPreviewBox" class="logo-preview-box">No Logo</div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>FEN List (max 9)</label>
-        <textarea id="fenInput" spellcheck="false">r1bqkbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R w KQkq - 2 4
+    <div class="app">
+        <div class="sidebar">
+            <div class="brand">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <h1>Chess Worksheet</h1>
+            </div>
+            
+            <div class="form-group">
+                <label>Academy Name / Title</label>
+                <input type="text" id="wsTitle" value="EduChess Academy Puzzle Worksheet">
+            </div>
+            <div class="form-group">
+                <label>Contact Info</label>
+                <input type="text" id="wsContact" value="+91 0000 0000 00">
+            </div>
+            <div class="form-group">
+                <label>Instructions</label>
+                <input type="text" id="wsSub" value="Solve the positions. White or Black to move is shown below.">
+            </div>
+            <div class="form-group">
+                <label>Logo</label>
+                <input type="file" id="logoIn" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>FENs (One per line, max 9)</label>
+                <textarea id="fens">r1bqkbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R w KQkq - 2 4
 2r3k1/5ppp/p2b4/1p1P4/1P6/P3R1P1/5P1P/4R1K1 w - - 0 1
 6k1/5pp1/7p/8/8/5P2/5KPP/8 w - - 0 1
 r4rk1/pp1n1ppp/2pbpn2/q7/3P4/2N1PN2/PPQ2PPP/R1B2RK1 w - - 0 1
@@ -137,122 +116,84 @@ r4rk1/pp1n1ppp/2pbpn2/q7/3P4/2N1PN2/PPQ2PPP/R1B2RK1 w - - 0 1
 r2q1rk1/ppp2ppp/2n2n2/3bp3/3P4/2PB1N2/PP3PPP/RNBQ1RK1 w - - 0 1
 8/2p5/1p1p4/p2Ppk2/P1P1P3/3K4/8/8 w - - 0 1
 2r3k1/5pp1/p6p/1p1P4/1P3P2/P5P1/6KP/2R5 w - - 0 1</textarea>
-      </div>
-
-      <div class="actions">
-        <button id="printBtn" class="btn btn-primary">Print to PDF</button>
-        <button id="clearBtn" class="btn btn-secondary">Clear All</button>
-      </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-primary" onclick="window.print()">Print PDF</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('fens').value=''; render()">Clear</button>
+            </div>
+        </div>
+        <div class="preview">
+            <div id="page" class="page"></div>
+        </div>
     </div>
 
-    <div class="preview-wrap">
-      <div id="pagePreview" class="page"></div>
-    </div>
-  </div>
+    <script>
+        const symbols = { 'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙', 'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟' };
+        let logoData = null;
 
-  <script>
-    const pieces = { 'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙', 'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟' };
-    const files = ['a','b','c','d','e','f','g','h'];
-    
-    const titleInput = document.getElementById('worksheetTitle');
-    const phoneInput = document.getElementById('academyPhone');
-    const subtitleInput = document.getElementById('academySubtitle');
-    const fenInput = document.getElementById('fenInput');
-    const pagePreview = document.getElementById('pagePreview');
-    const logoInput = document.getElementById('logoInput');
-    const logoPreviewBox = document.getElementById('logoPreviewBox');
+        function render() {
+            const title = document.getElementById('wsTitle').value;
+            const contact = document.getElementById('wsContact').value;
+            const sub = document.getElementById('wsSub').value;
+            const fenList = document.getElementById('fens').value.split('
+').filter(f => f.trim().split('/').length === 8).slice(0, 9);
 
-    let logoDataUrl = '';
-
-    function isValidFen(fen) {
-      if (!fen || !fen.trim()) return false;
-      const parts = fen.trim().split(/\s+/);
-      if (parts.length < 1) return false;
-      const rows = parts[0].split('/');
-      return rows.length === 8;
-    }
-
-    function expandFenRow(row) {
-      const squares = [];
-      for (const char of row) {
-        if (/\d/.test(char)) {
-          for (let i = 0; i < parseInt(char); i++) squares.push('');
-        } else {
-          squares.push(char);
+            let html = `
+                <div class="header">
+                    <div class="logo-box">${logoData ? `<img src="${logoData}">` : 'LOGO'}</div>
+                    <div class="title-block">
+                        <h2>${title}</h2>
+                        <p>${sub}</p>
+                    </div>
+                    <div class="contact"><strong>Contact</strong><br>${contact}</div>
+                </div>
+                <div class="grid">
+                    ${fenList.map((f, i) => createPuzzle(f, i)).join('')}
+                </div>
+                <div class="footer">Created with Chess Worksheet Generator</div>
+            `;
+            document.getElementById('page').innerHTML = html;
         }
-      }
-      return squares;
-    }
 
-    function createBoardHTML(fen, index) {
-      const parts = fen.trim().split(/\s+/);
-      const boardPart = parts[0];
-      const side = parts[1] || 'w';
-      const rows = boardPart.split('/').map(expandFenRow);
+        function createPuzzle(fen, idx) {
+            const parts = fen.trim().split(/\s+/);
+            const board = parts[0];
+            const side = parts[1] || 'w';
+            const rows = board.split('/').map(r => {
+                const row = [];
+                for (const char of r) {
+                    if (/\d/.test(char)) for (let i = 0; i < parseInt(char); i++) row.push('');
+                    else row.push(char);
+                }
+                return row;
+            });
 
-      let html = `<div class="puzzle">`;
-      html += `<div class="puzzle-meta"><span>Puzzle ${index + 1}</span><span>${side === 'w' ? 'White' : 'Black'} to move</span></div>`;
-      html += `<div class="board-wrap"><div class="board">`;
-
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          const isLight = (r + c) % 2 === 0;
-          const piece = rows[r][c];
-          html += `<div class="square ${isLight ? 'light' : 'dark'}">`;
-          if (piece) html += `<span class="piece-char">${pieces[piece]}</span>`;
-          if (r === 7) html += `<span class="coord file">${files[c]}</span>`;
-          if (c === 0) html += `<span class="coord rank">${8 - r}</span>`;
-          html += `</div>`;
+            let h = `<div class="puzzle">
+                <div class="p-meta"><span>Puzzle ${idx + 1}</span><span>${side === 'w' ? 'White' : 'Black'} to move</span></div>
+                <div class="board-wrap"><div class="board">`;
+            
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const isLight = (r + c) % 2 === 0;
+                    h += `<div class="square ${isLight ? 'light' : 'dark'}">`;
+                    if (rows[r][c]) h += `<span class="piece">${symbols[rows[r][c]]}</span>`;
+                    if (r === 7) h += `<span class="coord f">${'abcdefgh'[c]}</span>`;
+                    if (c === 0) h += `<span class="coord r">${8 - r}</span>`;
+                    h += `</div>`;
+                }
+            }
+            h += `</div></div><div class="move-text">${side === 'w' ? 'White' : 'Black'} to move</div></div>`;
+            return h;
         }
-      }
-      html += `</div></div>`;
-      html += `<div class="side-to-move">${side === 'w' ? 'White to move' : 'Black to move'}</div>`;
-      html += `</div>`;
-      return html;
-    }
 
-    function render() {
-      const title = titleInput.value.trim() || 'Worksheet';
-      const phone = phoneInput.value.trim();
-      const subtitle = subtitleInput.value.trim();
-      const fens = fenInput.value.split(/
-/).map(f => f.trim()).filter(f => isValidFen(f)).slice(0, 9);
+        document.querySelectorAll('input, textarea').forEach(el => el.addEventListener('input', render));
+        document.getElementById('logoIn').addEventListener('change', e => {
+            const reader = new FileReader();
+            reader.onload = () => { logoData = reader.result; render(); };
+            reader.readAsDataURL(e.target.files[0]);
+        });
 
-      let html = `
-        <div class="worksheet-header">
-          <div>${logoDataUrl ? `<img src="${logoDataUrl}" class="header-logo">` : `<div class="header-logo-placeholder">LOGO HERE</div>`}</div>
-          <div class="title-block">
-            <div class="worksheet-title">${title}</div>
-            <div class="worksheet-subtitle">${subtitle}</div>
-          </div>
-          <div class="contact-block"><strong>Contact</strong><br>${phone}</div>
-        </div>
-        <div class="puzzle-grid">
-          ${fens.map((f, i) => createBoardHTML(f, i)).join('')}
-        </div>
-        <div class="footer-note">Generated by Chess Worksheet Pro • ${fens.length} positions</div>
-      `;
-      pagePreview.innerHTML = html;
-    }
-
-    [titleInput, phoneInput, subtitleInput, fenInput].forEach(el => el.addEventListener('input', render));
-    
-    logoInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        logoDataUrl = reader.result;
-        logoPreviewBox.innerHTML = `<img src="${logoDataUrl}">`;
         render();
-      };
-      reader.readAsDataURL(file);
-    });
-
-    document.getElementById('printBtn').addEventListener('click', () => window.print());
-    document.getElementById('clearBtn').addEventListener('click', () => { fenInput.value = ''; render(); });
-
-    render();
-  </script>
+    </script>
 </body>
 </html>
