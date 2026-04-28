@@ -194,7 +194,6 @@
         .coord.f { right: 2px; bottom: 1px; color: currentColor; }
         .coord.r { left: 2px; top: 1px; color: currentColor; }
         
-        /* Dynamic coordinate colors */
         .light .coord { color: var(--board-dark); }
         .dark .coord { color: var(--board-light); }
 
@@ -235,42 +234,42 @@
                 padding: 10mm 10mm !important; 
             }
             .app { display: block !important; }
-            .piece { font-size: 28px; } /* Slightly smaller for print precision */
+            .piece { font-size: 28px; }
         }
     </style>
 </head>
 <body>
 
-<div class=\"app\">
-    <div class=\"sidebar\">
-        <div class=\"brand\">
-            <svg viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M19 19H5V5h14v14zM5 3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5z\"/></svg>
+<div class="app">
+    <div class="sidebar">
+        <div class="brand">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 19H5V5h14v14zM5 3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5z"/></svg>
             <h1>Chess Worksheet</h1>
         </div>
 
-        <div class=\"form-group\">
+        <div class="form-group">
             <label>Worksheet Title</label>
-            <input type=\"text\" id=\"wsTitle\" value=\"EduChess Academy Puzzle Worksheet\">
+            <input type="text" id="wsTitle" value="EduChess Academy Puzzle Worksheet">
         </div>
 
-        <div class=\"form-group\">
+        <div class="form-group">
             <label>Contact Info</label>
-            <input type=\"text\" id=\"wsContact\" value=\"+91 0000 0000 00\">
+            <input type="text" id="wsContact" value="+91 0000 0000 00">
         </div>
 
-        <div class=\"form-group\">
+        <div class="form-group">
             <label>Instructions</label>
-            <input type=\"text\" id=\"wsSub\" value=\"Solve the positions. White or Black to move is shown below each board.\">
+            <input type="text" id="wsSub" value="Solve the positions. White or Black to move is shown below each board.">
         </div>
 
-        <div class=\"form-group\">
+        <div class="form-group">
             <label>Academy Logo</label>
-            <input type=\"file\" id=\"logoIn\" accept=\"image/*\">
+            <input type="file" id="logoIn" accept="image/*">
         </div>
 
-        <div class=\"form-group\">
+        <div class="form-group">
             <label>FEN Positions (one per line)</label>
-            <textarea id=\"fens\" spellcheck=\"false\" placeholder=\"Paste FENs here...\">r1bqkbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R w KQkq - 2 4
+            <textarea id="fens" spellcheck="false" placeholder="Paste FENs here...">r1bqkbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R w KQkq - 2 4
 2r3k1/5ppp/p2b4/1p1P4/1P6/P3R1P1/5P1P/4R1K1 w - - 0 1
 6k1/5pp1/7p/8/8/5P2/5KPP/8 w - - 0 1
 r4rk1/pp1n1ppp/2pbpn2/q7/3P4/2N1PN2/PPQ2PPP/R1B2RK1 w - - 0 1
@@ -281,14 +280,14 @@ r2q1rk1/ppp2ppp/2n2n2/3bp3/3P4/2PB1N2/PP3PPP/RNBQ1RK1 w - - 0 1
 2r3k1/5pp1/p6p/1p1P4/1P3P2/P5P1/6KP/2R5 w - - 0 1</textarea>
         </div>
 
-        <div class=\"actions\">
-            <button class=\"btn btn-primary\" onclick=\"window.print()\">Print Worksheet</button>
-            <button class=\"btn btn-secondary\" onclick=\"clearFens()\">Clear FENS</button>
+        <div class="actions">
+            <button class="btn btn-primary" onclick="window.print()">Print Worksheet</button>
+            <button class="btn btn-secondary" onclick="clearFens()">Clear FENS</button>
         </div>
     </div>
 
-    <div class=\"preview\">
-        <div class=\"page\" id=\"page\"></div>
+    <div class="preview">
+        <div class="page" id="page"></div>
     </div>
 </div>
 
@@ -306,25 +305,24 @@ r2q1rk1/ppp2ppp/2n2n2/3bp3/3P4/2PB1N2/PP3PPP/RNBQ1RK1 w - - 0 1
         const sub = document.getElementById('wsSub').value;
         const fensText = document.getElementById('fens').value;
         
-        // Improved FEN matching
         const fenList = fensText.match(/[rnbqkpRNBQKP1-8/]+\s+[wb]\s+\S+\s+\S+\s+\d+\s+\d+/g) || [];
         const cleanFens = fenList.map(f => f.trim()).filter(f => f.length > 0).slice(0, 9);
 
         let html = `
-            <div class=\"header\">
-                <div class=\"logo-box\">${logoData ? `<img src=\"${logoData}\">` : 'UPLOAD LOGO'}</div>
-                <div class=\"title-block\">
+            <div class="header">
+                <div class="logo-box">${logoData ? `<img src="${logoData}">` : 'UPLOAD LOGO'}</div>
+                <div class="title-block">
                     <h2>${title}</h2>
                     <p>${sub}</p>
                 </div>
-                <div class=\"contact\">
+                <div class="contact">
                     <strong>Contact</strong><br>${contact}
                 </div>
             </div>
-            <div class=\"grid\">
+            <div class="grid">
                 ${cleanFens.map((f, i) => createPuzzle(f, i)).join('')}
             </div>
-            <div class=\"footer-ws\">EduChess Academy • Generated by Chess Worksheet Pro</div>
+            <div class="footer-ws">EduChess Academy • Generated by Chess Worksheet Pro</div>
         `;
         document.getElementById('page').innerHTML = html;
     }
@@ -347,27 +345,27 @@ r2q1rk1/ppp2ppp/2n2n2/3bp3/3P4/2PB1N2/PP3PPP/RNBQ1RK1 w - - 0 1
         });
 
         let h = `
-            <div class=\"puzzle\">
-                <div class=\"p-meta\">
+            <div class="puzzle">
+                <div class="p-meta">
                     <span>Puzzle ${idx + 1}</span>
                     <span>${turn === 'w' ? 'White' : 'Black'} to move</span>
                 </div>
-                <div class=\"board-wrap\">
-                    <div class=\"board\">
+                <div class="board-wrap">
+                    <div class="board">
         `;
 
         for (let r = 0; r < 8; r++) {
             for (let c = 0; c < 8; c++) {
                 const isLight = (r + c) % 2 === 0;
                 const piece = rows[r][c];
-                h += `<div class=\"square ${isLight ? 'light' : 'dark'}\">`;
+                h += `<div class="square ${isLight ? 'light' : 'dark'}">`;
                 
                 if (piece) {
-                    h += `<span class=\"piece\">${symbols[piece] || ''}</span>`;
+                    h += `<span class="piece">${symbols[piece] || ''}</span>`;
                 }
 
-                if (r === 7) h += `<span class=\"coord f\">${'abcdefgh'[c]}</span>`;
-                if (c === 0) h += `<span class=\"coord r\">${8 - r}</span>`;
+                if (r === 7) h += `<span class="coord f">${'abcdefgh'[c]}</span>`;
+                if (c === 0) h += `<span class="coord r">${8 - r}</span>`;
                 
                 h += `</div>`;
             }
@@ -376,7 +374,7 @@ r2q1rk1/ppp2ppp/2n2n2/3bp3/3P4/2PB1N2/PP3PPP/RNBQ1RK1 w - - 0 1
         h += `
                     </div>
                 </div>
-                <div class=\"move-text\">${turn === 'w' ? 'White' : 'Black'} to move</div>
+                <div class="move-text">${turn === 'w' ? 'White' : 'Black'} to move</div>
             </div>
         `;
         return h;
