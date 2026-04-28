@@ -100,7 +100,10 @@
       line-height: 1.6;
     }
 
-    .form-group { margin-bottom: var(--space-5); }
+    .form-group {
+      margin-bottom: var(--space-5);
+    }
+
     label {
       display: block;
       font-weight: 600;
@@ -108,7 +111,7 @@
       font-size: var(--text-sm);
     }
 
-    input[type="text"], textarea {
+    input[type=\"text\"], textarea {
       width: 100%;
       border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
@@ -178,13 +181,17 @@
       box-shadow: var(--shadow-md);
     }
 
-    .btn-primary:hover { background: var(--color-primary-hover); }
+    .btn-primary:hover {
+      background: var(--color-primary-hover);
+    }
+
     .btn-secondary {
       background: var(--color-surface);
       color: var(--color-text);
       border: 1px solid var(--color-border);
     }
 
+    /* Worksheet Preview Styles */
     .card {
       background: var(--color-surface);
       border: 1px solid rgba(33,29,24,0.12);
@@ -221,7 +228,9 @@
       display: none;
     }
 
-    .print-logo.show { display: block; }
+    .print-logo.show {
+      display: block;
+    }
 
     .logo-fallback {
       width: 82px;
@@ -298,6 +307,10 @@
       font-size: 23px;
       user-select: none;
       position: relative;
+      /* Fix for pieces getting squashed or off-center */
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
     }
 
     .light { background: #f0d9b5; }
@@ -311,8 +324,15 @@
       opacity: 0.75;
     }
 
-    .coord.file { right: 2px; bottom: 2px; }
-    .coord.rank { left: 2px; top: 2px; }
+    .coord.file {
+      right: 2px;
+      bottom: 2px;
+    }
+
+    .coord.rank {
+      left: 2px;
+      top: 2px;
+    }
 
     .side-to-move {
       margin-top: 2.5mm;
@@ -350,59 +370,50 @@
       body { background: white; }
       .panel { display: none !important; }
       .preview-wrap { padding: 0; overflow: visible; }
-      .page {
-        width: 100%;
-        min-height: auto;
-        margin: 0;
-        box-shadow: none;
-        padding: 0;
-      }
+      .page { width: 100%; min-height: auto; margin: 0; box-shadow: none; padding: 0; }
       .page, .puzzle, .board-wrap { break-inside: avoid; }
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <aside class="panel">
-      <div class="brand">
-        <svg viewBox="0 0 64 64" fill="none" aria-label="Chess worksheet logo">
-          <path d="M20 54h24M22 48h20M25 20h14M27 12h10M24 27c0-3 2-5 5-6-1-1-2-3-2-5 0-3 2-5 5-5s5 2 5 5c0 2-1 4-2 5 3 1 5 3 5 6 0 4-3 7-8 7h-4c-5 0-8-3-8-7Z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M24 27c2 5 2 11-2 21M40 27c-2 5-2 11 2 21" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-        </svg>
-        <div>
-          <div class="brand-title">Chess Worksheet Generator</div>
-          <div class="hint">Build printable 9-puzzle sheets from your own FEN list.</div>
+
+<div class=\"app\">
+  <div class=\"panel\">
+    <div class=\"brand\">
+      <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M19 14v1a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3v-1\"/><path d=\"m18 9-3-4H9L6 9\"/><path d=\"M12 5v4\"/><path d=\"M8 9h8\"/><path d=\"M12 9v4\"/><path d=\"M8 13h8\"/><path d=\"M10 22h4\"/><path d=\"M8 22v-2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\"/></svg>
+      <div class=\"brand-title\">Chess Worksheet Generator</div>
+    </div>
+    
+    <p class=\"intro\">Build printable 9-puzzle sheets from your own FEN list.</p>
+
+    <div class=\"form-group\">
+      <label>Worksheet title</label>
+      <input id=\"worksheetTitle\" type=\"text\" value=\"EduChess Academy Puzzle Worksheet\">
+    </div>
+
+    <div class=\"form-group\">
+      <label>Phone number</label>
+      <input id=\"academyPhone\" type=\"text\" value=\"+91 \">
+    </div>
+
+    <div class=\"form-group\">
+      <label>Subtitle / small line</label>
+      <input id=\"academySubtitle\" type=\"text\" value=\"Solve all 9 positions. White or Black to move is shown below each board.\">
+    </div>
+
+    <div class=\"form-group\">
+      <label>Academy logo</label>
+      <div class=\"logo-upload\">
+        <input id=\"logoInput\" type=\"file\" accept=\"image/*\">
+        <div id=\"logoPreviewBox\" class=\"logo-preview-box\">
+          <span style=\"font-size: 10px; color: #888;\">No logo</span>
         </div>
       </div>
+    </div>
 
-      <p class="intro">Paste up to 9 FEN positions, set the title, add your academy phone number, upload your logo, and print a clean A4 worksheet for students.</p>
-
-      <div class="form-group">
-        <label for="worksheetTitle">Worksheet title</label>
-        <input id="worksheetTitle" type="text" value="EduChess Academy Puzzle Worksheet" />
-      </div>
-
-      <div class="form-group">
-        <label for="academyPhone">Phone number</label>
-        <input id="academyPhone" type="text" value="+91 " />
-      </div>
-
-      <div class="form-group">
-        <label for="academySubtitle">Subtitle / small line</label>
-        <input id="academySubtitle" type="text" value="Solve all 9 positions. White or Black to move is shown below each board." />
-      </div>
-
-      <div class="form-group">
-        <label for="logoInput">Academy logo</label>
-        <div class="logo-upload">
-          <input id="logoInput" type="file" accept="image/*" />
-          <div class="logo-preview-box" id="logoPreviewBox"><span class="hint">No logo</span></div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="fenInput">FEN positions (one per line)</label>
-        <textarea id="fenInput" spellcheck="false">8/8/8/2k5/2P5/2K5/8/8 w - - 0 1
+    <div class=\"form-group\">
+      <label>FEN positions (one per line)</label>
+      <textarea id=\"fenInput\" spellcheck=\"false\">8/8/8/2k5/2P5/2K5/8/8 w - - 0 1
 8/8/8/3k4/3P4/3K4/8/8 w - - 0 1
 8/8/4k3/8/3P4/4K3/8/8 w - - 0 1
 6k1/5ppp/8/8/8/8/5PPP/6K1 w - - 0 1
@@ -411,166 +422,181 @@
 8/8/2k5/8/2P5/8/2K5/8 w - - 0 1
 8/4k3/8/8/4P3/8/4K3/8 w - - 0 1
 8/8/8/2k5/8/2P5/2K5/8 w - - 0 1</textarea>
-        <div class="hint">Use complete FEN strings, one per line. Only the first 9 valid FENs are printed on the page.</div>
-      </div>
+      <p class=\"hint\">Use complete FEN strings, one per line. Only the first 9 valid FENs are printed on the page.</p>
+    </div>
 
-      <div class="actions">
-        <button class="btn btn-primary" id="printBtn">Print worksheet</button>
-        <button class="btn btn-secondary" id="sampleBtn">Load sample FENs</button>
-        <button class="btn btn-secondary" id="clearBtn">Clear FENs</button>
-      </div>
-    </aside>
-
-    <main class="preview-wrap">
-      <div class="page card" id="pagePreview"></div>
-    </main>
+    <div class=\"actions\">
+      <button class=\"btn btn-primary\" id=\"printBtn\">Print worksheet</button>
+      <button class=\"btn btn-secondary\" id=\"sampleBtn\">Load sample FENs</button>
+      <button class=\"btn btn-secondary\" id=\"clearBtn\">Clear FENs</button>
+    </div>
   </div>
 
-  <script>
-    const pieces = {
-      'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙',
-      'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟'
-    };
+  <div class=\"preview-wrap\">
+    <div class=\"card\">
+      <div id=\"pagePreview\" class=\"page\"></div>
+    </div>
+  </div>
+</div>
 
-    const titleInput = document.getElementById('worksheetTitle');
-    const phoneInput = document.getElementById('academyPhone');
-    const subtitleInput = document.getElementById('academySubtitle');
-    const fenInput = document.getElementById('fenInput');
-    const pagePreview = document.getElementById('pagePreview');
-    const logoInput = document.getElementById('logoInput');
-    const logoPreviewBox = document.getElementById('logoPreviewBox');
+<script>
+  const pieces = {
+    'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙',
+    'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟'
+  };
 
-    let logoDataUrl = '';
+  const titleInput = document.getElementById('worksheetTitle');
+  const phoneInput = document.getElementById('academyPhone');
+  const subtitleInput = document.getElementById('academySubtitle');
+  const fenInput = document.getElementById('fenInput');
+  const pagePreview = document.getElementById('pagePreview');
+  const logoInput = document.getElementById('logoInput');
+  const logoPreviewBox = document.getElementById('logoPreviewBox');
 
-    const files = ['a','b','c','d','e','f','g','h'];
+  let logoDataUrl = '';
+  const files = ['a','b','c','d','e','f','g','h'];
 
-    function isValidFen(fen) {
-      try {
-        const chess = new Chess();
-        return chess.load(fen.trim());
-      } catch (e) {
-        return false;
-      }
+  function isValidFen(fen) {
+    try {
+      const chess = new Chess();
+      return chess.load(fen.trim());
+    } catch (e) {
+      return false;
     }
+  }
 
-    function expandFenBoard(fenBoard) {
-      const rows = fenBoard.split('/');
-      return rows.map(row => {
-        const squares = [];
-        for (const ch of row) {
-          if (/\d/.test(ch)) {
-            for (let i = 0; i < Number(ch); i++) squares.push('');
-          } else {
-            squares.push(ch);
-          }
-        }
-        return squares;
-      });
-    }
-
-    function createBoardHTML(fen, index) {
-      const [boardPart, turn] = fen.split(' ');
-      const rows = expandFenBoard(boardPart);
-      let html = '<div class="puzzle">';
-      html += `<div class="puzzle-meta"><span>Puzzle ${index + 1}</span><span>${turn === 'w' ? 'White' : 'Black'} to move</span></div>`;
-      html += '<div class="board-wrap"><div class="board">';
-
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          const isLight = (r + c) % 2 === 0;
-          const piece = rows[r][c];
-          const rank = 8 - r;
-          const file = files[c];
-          const showFile = r === 7;
-          const showRank = c === 0;
-          html += `<div class="square ${isLight ? 'light' : 'dark'}">${pieces[piece] || ''}`;
-          if (showFile) html += `<span class="coord file">${file}</span>`;
-          if (showRank) html += `<span class="coord rank">${rank}</span>`;
-          html += '</div>';
+  function expandFenBoard(fenBoard) {
+    const rows = fenBoard.split('/');
+    return rows.map(row => {
+      const squares = [];
+      for (const ch of row) {
+        if (/\\d/.test(ch)) {
+          for (let i = 0; i < Number(ch); i++) squares.push('');
+        } else {
+          squares.push(ch);
         }
       }
+      return squares;
+    });
+  }
 
-      html += '</div></div>';
-      html += `<div class="side-to-move">${turn === 'w' ? 'White to move' : 'Black to move'}</div>`;
-      html += '</div>';
-      return html;
-    }
+  function createBoardHTML(fen, index) {
+    const [boardPart, turn] = fen.split(' ');
+    const rows = expandFenBoard(boardPart);
+    
+    let html = '<div class=\"puzzle\">';
+    html += `<div class=\"puzzle-meta\"><span>Puzzle ${index + 1}</span><span>${turn === 'w' ? 'White' : 'Black'} to move</span></div>`;
+    html += '<div class=\"board-wrap\"><div class=\"board\">';
 
-    function renderWorksheet() {
-      const title = titleInput.value.trim() || 'Chess Puzzle Worksheet';
-      const phone = phoneInput.value.trim() || 'Add phone number';
-      const subtitle = subtitleInput.value.trim() || 'Solve the positions below.';
-      const rawFens = fenInput.value.split('\n').map(line => line.trim()).filter(Boolean);
-      const validFens = rawFens.filter(isValidFen).slice(0, 9);
-      const invalidCount = rawFens.length - validFens.length;
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const isLight = (r + c) % 2 === 0;
+        const piece = rows[r][c];
+        const rank = 8 - r;
+        const file = files[c];
+        const showFile = r === 7;
+        const showRank = c === 0;
 
-      let html = `
-        <div class="worksheet-header">
-          <div>
-            ${logoDataUrl ? `<img src="${logoDataUrl}" alt="Academy logo" class="print-logo show">` : '<div class="logo-fallback">ACADEMY LOGO</div>'}
-          </div>
-          <div class="title-block">
-            <div class="worksheet-title">${escapeHtml(title)}</div>
-            <div class="worksheet-subtitle">${escapeHtml(subtitle)}</div>
-          </div>
-          <div class="contact-block">
-            <div><strong>Contact</strong></div>
-            <div>${escapeHtml(phone)}</div>
-          </div>
-        </div>
-      `;
-
-      if (validFens.length === 0) {
-        html += '<div class="empty-state"><h3>No valid FENs yet</h3><p>Paste one FEN per line in the left panel to build the worksheet preview.</p></div>';
-      } else {
-        html += '<div class="puzzle-grid">';
-        validFens.forEach((fen, index) => {
-          html += createBoardHTML(fen, index);
-        });
+        html += `<div class=\"square ${isLight ? 'light' : 'dark'}\">${pieces[piece] || ''}`;
+        if (showFile) html += `<span class=\"coord file\">${file}</span>`;
+        if (showRank) html += `<span class=\"coord rank\">${rank}</span>`;
         html += '</div>';
-        html += `<div class="footer-note">Showing ${validFens.length} puzzle${validFens.length > 1 ? 's' : ''}${invalidCount > 0 ? ` • ${invalidCount} invalid line${invalidCount > 1 ? 's were' : ' was'} ignored` : ''}</div>`;
       }
-
-      pagePreview.innerHTML = html;
     }
 
-    function escapeHtml(str) {
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+    html += '</div></div>';
+    html += `<div class=\"side-to-move\">${turn === 'w' ? 'White to move' : 'Black to move'}</div>`;
+    html += '</div>';
+    return html;
+  }
+
+  function renderWorksheet() {
+    const title = titleInput.value.trim() || 'Chess Puzzle Worksheet';
+    const phone = phoneInput.value.trim() || 'Add phone number';
+    const subtitle = subtitleInput.value.trim() || 'Solve the positions below.';
+    
+    const rawFens = fenInput.value.split('\
+').map(line => line.trim()).filter(Boolean);
+    const validFens = rawFens.filter(isValidFen).slice(0, 9);
+    const invalidCount = rawFens.length - validFens.length;
+
+    let html = `
+      <div class=\"worksheet-header\">
+        <div>
+          ${logoDataUrl ? `<img src=\"${logoDataUrl}\" alt=\"Academy logo\" class=\"print-logo show\">` : '<div class=\"logo-fallback\">ACADEMY LOGO</div>'}
+        </div>
+        <div class=\"title-block\">
+          <div class=\"worksheet-title\">${escapeHtml(title)}</div>
+          <div class=\"worksheet-subtitle\">${escapeHtml(subtitle)}</div>
+        </div>
+        <div class=\"contact-block\">
+          <div><strong>Contact</strong></div>
+          <div>${escapeHtml(phone)}</div>
+        </div>
+      </div>
+    `;
+
+    if (validFens.length === 0) {
+      html += '<div class=\"empty-state\"><h3>No valid FENs yet</h3><p>Paste one FEN per line in the left panel to build the worksheet preview.</p></div>';
+    } else {
+      html += '<div class=\"puzzle-grid\">';
+      validFens.forEach((fen, index) => {
+        html += createBoardHTML(fen, index);
+      });
+      html += '</div>';
+      html += `<div class=\"footer-note\">Showing ${validFens.length} puzzle${validFens.length > 1 ? 's' : ''}${invalidCount > 0 ? ` • ${invalidCount} invalid line${invalidCount > 1 ? 's were' : ' was'} ignored` : ''}</div>`;
     }
 
-    [titleInput, phoneInput, subtitleInput, fenInput].forEach(el => {
-      el.addEventListener('input', renderWorksheet);
-    });
+    pagePreview.innerHTML = html;
+  }
 
-    logoInput.addEventListener('change', (e) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        logoDataUrl = reader.result;
-        logoPreviewBox.innerHTML = `<img src="${logoDataUrl}" alt="Logo preview">`;
-        renderWorksheet();
-      };
-      reader.readAsDataURL(file);
-    });
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
 
-    document.getElementById('printBtn').addEventListener('click', () => window.print());
-    document.getElementById('sampleBtn').addEventListener('click', () => {
-      fenInput.value = `r1bqkbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R w KQkq - 2 4\n2r3k1/5ppp/p2b4/1p1P4/1P6/P3R1P1/5P1P/4R1K1 w - - 0 1\n6k1/5pp1/7p/8/8/5P2/5KPP/8 w - - 0 1\nr4rk1/pp1n1ppp/2pbpn2/q7/3P4/2N1PN2/PPQ2PPP/R1B2RK1 w - - 0 1\n8/8/3k4/3p4/3P4/3K4/8/8 w - - 0 1\n6k1/1p3pp1/p6p/3P4/1P6/P5PP/5PK1/8 w - - 0 1\nr2q1rk1/ppp2ppp/2n2n2/3bp3/3P4/2PB1N2/PP3PPP/RNBQ1RK1 w - - 0 1\n8/2p5/1p1p4/p2Ppk2/P1P1P3/3K4/8/8 w - - 0 1\n2r3k1/5pp1/p6p/1p1P4/1P3P2/P5P1/6KP/2R5 w - - 0 1`;
+  [titleInput, phoneInput, subtitleInput, fenInput].forEach(el => {
+    el.addEventListener('input', renderWorksheet);
+  });
+
+  logoInput.addEventListener('change', (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      logoDataUrl = reader.result;
+      logoPreviewBox.innerHTML = `<img src=\"${logoDataUrl}\" alt=\"Logo preview\">`;
       renderWorksheet();
-    });
+    };
+    reader.readAsDataURL(file);
+  });
 
-    document.getElementById('clearBtn').addEventListener('click', () => {
-      fenInput.value = '';
-      renderWorksheet();
-    });
-
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
+  document.getElementById('sampleBtn').addEventListener('click', () => {
+    fenInput.value = \`r1bqkbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R w KQkq - 2 4\
+2r3k1/5ppp/p2b4/1p1P4/1P6/P3R1P1/5P1P/4R1K1 w - - 0 1\
+6k1/5pp1/7p/8/8/5P2/5KPP/8 w - - 0 1\
+r4rk1/pp1n1ppp/2pbpn2/q7/3P4/2N1PN2/PPQ2PPP/R1B2RK1 w - - 0 1\
+8/8/3k4/3p4/3P4/3K4/8/8 w - - 0 1\
+6k1/1p3pp1/p6p/3P4/1P6/P5PP/5PK1/8 w - - 0 1\
+r2q1rk1/ppp2ppp/2n2n2/3bp3/3P4/2PB1N2/PP3PPP/RNBQ1RK1 w - - 0 1\
+8/2p5/1p1p4/p2Ppk2/P1P1P3/3K4/8/8 w - - 0 1\
+2r3k1/5pp1/p6p/1p1P4/1P3P2/P5P1/6KP/2R5 w - - 0 1\`;
     renderWorksheet();
-  </script>
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    fenInput.value = '';
+    renderWorksheet();
+  });
+
+  renderWorksheet();
+</script>
+
 </body>
 </html>
