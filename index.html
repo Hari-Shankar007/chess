@@ -355,13 +355,13 @@ r2q1rk1/ppp2ppp/2n2n2/3bp3/3P4/2PB1N2/PP3PPP/RNBQ1RK1 w - - 0 1
                 for (let c = 0; c < 8; c++) {
                     const isLight = (r + c) % 2 === 0;
                     const piece = rows[r][c];
-                    h += \`<div class="square \${isLight ? 'light' : 'dark'}">\`;
+                    h += `<div class="square ${isLight ? 'light' : 'dark'}">`;
                     if (piece) {
-                        h += \`<span class="piece">\${symbols[piece] || ''}</span>\`;
+                        h += `<span class="piece">${symbols[piece] || ''}</span>`;
                     }
-                    if (r === 7) h += \`<span class="coord f">\${'abcdefgh'[c]}</span>\`;
-                    if (c === 0) h += \`<span class="coord r">\${8 - r}</span>\`;
-                    h += \`</div>\`;
+                    if (r === 7) h += `<span class="coord f">${'abcdefgh'[c]}</span>`;
+                    if (c === 0) h += `<span class="coord r">${8 - r}</span>`;
+                    h += `</div>`;
                 }
             }
 
