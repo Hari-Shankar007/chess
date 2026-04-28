@@ -21,119 +21,251 @@
         }
 
         * { box-sizing: border-box; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
-        
-        .app { display: grid; grid-template-columns: 380px 1fr; height: 100vh; }
-        .sidebar { background: #fff; padding: 24px; border-right: 1px solid var(--border); overflow-y: auto; }
-        .preview { padding: 40px; overflow-y: auto; display: flex; justify-content: center; background: #e2e0d8; }
+        body { 
+            margin: 0; 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            line-height: 1.5;
+        }
 
-        .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+        .app { 
+            display: grid; 
+            grid-template-columns: 380px 1fr; 
+            height: 100vh; 
+        }
+
+        .sidebar { 
+            background: #fff; 
+            padding: 24px; 
+            border-right: 1px solid var(--border); 
+            overflow-y: auto; 
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .preview { 
+            padding: 40px; 
+            overflow-y: auto; 
+            display: flex; 
+            justify-content: center; 
+            background: #e2e0d8; 
+        }
+
+        .brand { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            margin-bottom: 12px; 
+        }
         .brand svg { width: 32px; height: 32px; color: var(--primary); }
         .brand h1 { font-family: 'Libre Baskerville', serif; font-size: 20px; margin: 0; }
 
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: var(--text-muted); }
-        input, textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; }
-        textarea { height: 160px; font-family: monospace; resize: vertical; }
+        .form-group { margin-bottom: 0; }
+        label { 
+            display: block; 
+            font-weight: 600; 
+            font-size: 13px; 
+            margin-bottom: 6px; 
+            color: var(--text-muted); 
+        }
 
-        .actions { display: flex; gap: 12px; margin-top: 24px; }
-        .btn { padding: 12px 24px; border-radius: 24px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; font-size: 14px; }
+        input, textarea { 
+            width: 100%; 
+            padding: 10px 14px; 
+            border: 1px solid var(--border); 
+            border-radius: 6px; 
+            font-size: 14px; 
+            background: #fff;
+        }
+        textarea { height: 180px; font-family: monospace; resize: vertical; }
+
+        .actions { display: flex; gap: 12px; margin-top: 8px; }
+        .btn { 
+            flex: 1;
+            padding: 12px; 
+            border-radius: 24px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            border: none; 
+            transition: 0.2s; 
+            font-size: 14px; 
+            text-align: center;
+            text-decoration: none;
+        }
         .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: var(--primary-hover); }
         .btn-secondary { background: #fff; border: 1px solid var(--border); color: var(--text); }
+        .btn-secondary:hover { background: #f9f9f9; }
 
         /* A4 Page */
-        .page { width: 210mm; min-height: 297mm; background: #fff; padding: 12mm 15mm; box-shadow: 0 4px 30px rgba(0,0,0,0.15); position: relative; color: #000; }
-        .header { display: grid; grid-template-columns: 100px 1fr 120px; align-items: center; gap: 20px; border-bottom: 3px solid #000; padding-bottom: 12px; margin-bottom: 20px; }
-        .logo-box { width: 90px; height: 90px; border: 1px solid #ddd; display: grid; place-items: center; font-weight: bold; font-size: 10px; color: #999; }
-        .logo-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .title-block { text-align: center; }
-        .title-block h2 { font-family: 'Libre Baskerville', serif; font-size: 26px; margin: 0; }
-        .title-block p { font-size: 12px; color: #555; margin: 5px 0 0; }
-        .contact { text-align: right; font-size: 11px; line-height: 1.5; }
+        .page { 
+            width: 210mm; 
+            min-height: 297mm; 
+            background: #fff; 
+            padding: 15mm 20mm; 
+            box-shadow: 0 4px 30px rgba(0,0,0,0.15); 
+            position: relative; 
+            color: #000;
+        }
 
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10mm 8mm; margin-top: 15px; }
-        .puzzle { break-inside: avoid; }
-        .p-meta { display: flex; justify-content: space-between; font-weight: 800; font-size: 11px; border-bottom: 1px solid #000; margin-bottom: 5px; padding-bottom: 2px; }
-        
-        /* THE FIX: Padding trick for absolute 1:1 square */
+        .header { 
+            display: grid; 
+            grid-template-columns: 100px 1fr 120px; 
+            align-items: center; 
+            gap: 20px; 
+            border-bottom: 3px solid #000; 
+            padding-bottom: 15px; 
+            margin-bottom: 25px; 
+        }
+
+        .logo-box { 
+            width: 90px; 
+            height: 90px; 
+            border: 2px dashed #ccc; 
+            display: grid; 
+            place-items: center; 
+            font-weight: bold; 
+            font-size: 11px; 
+            color: #aaa;
+            text-transform: uppercase;
+        }
+        .logo-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+        .title-block { text-align: center; }
+        .title-block h2 { font-family: 'Libre Baskerville', serif; font-size: 24px; margin: 0; }
+        .title-block p { font-size: 13px; color: #444; margin: 8px 0 0; font-weight: 500; }
+
+        .contact { text-align: right; font-size: 11px; line-height: 1.6; }
+
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 12mm 10mm; 
+        }
+
+        .puzzle { break-inside: avoid; display: flex; flex-direction: column; }
+
+        .p-meta { 
+            display: flex; 
+            justify-content: space-between; 
+            font-weight: 800; 
+            font-size: 12px; 
+            border-bottom: 2px solid #000; 
+            margin-bottom: 6px; 
+            padding-bottom: 3px; 
+        }
+
         .board-wrap { 
             width: 100%; 
             padding-top: 100%; 
             position: relative; 
-            border: 2px solid #000;
-            background: #fff;
+            border: 2px solid #000; 
         }
+
         .board { 
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+            position: absolute; 
+            top: 0; left: 0; right: 0; bottom: 0; 
             display: grid; 
             grid-template-columns: repeat(8, 1fr); 
-            grid-template-rows: repeat(8, 1fr);
+            grid-template-rows: repeat(8, 1fr); 
         }
+
         .square { 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             position: relative; 
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
         }
-        
-        .light { background: #ebecd0; }
-        .dark { background: #779556; }
-        
+        .light { background: #fff; }
+        .dark { background: #d1d1d1; }
+
         .piece { 
-            font-size: 34px; 
+            font-size: 38px; 
             line-height: 1; 
             z-index: 2; 
-            pointer-events: none;
             user-select: none;
+            display: block;
+            margin-top: -4px; /* Optical centering for some chess fonts/symbols */
         }
-        
-        .coord { position: absolute; font-size: 8px; font-weight: 900; font-family: monospace; z-index: 1; }
-        .coord.f { right: 1px; bottom: 0; }
-        .coord.r { left: 1px; top: 0; }
-        .light .coord { color: #779556; }
-        .dark .coord { color: #ebecd0; }
 
-        .footer-ws { position: absolute; bottom: 10mm; left: 0; right: 0; text-align: center; font-size: 10px; color: #888; border-top: 1px solid #eee; padding-top: 8px; margin: 0 15mm; }
-        .move-text { text-align: center; font-size: 11px; font-weight: 700; margin-top: 8px; padding: 3px; border: 1.5px solid #000; background: #fdfdfd; }
+        .coord { 
+            position: absolute; 
+            font-size: 8px; 
+            font-weight: 900; 
+            font-family: 'Inter', sans-serif; 
+            z-index: 1; 
+        }
+        .coord.f { right: 2px; bottom: 1px; }
+        .coord.r { left: 2px; top: 1px; }
+
+        .move-text { 
+            text-align: center; 
+            font-size: 11px; 
+            font-weight: 700; 
+            margin-top: 8px; 
+            padding: 4px; 
+            border: 1.5px solid #000; 
+            background: #f9f9f9;
+        }
+
+        .footer-ws { 
+            position: absolute; 
+            bottom: 10mm; 
+            left: 0; right: 0; 
+            text-align: center; 
+            font-size: 10px; 
+            color: #777; 
+            border-top: 1px solid #eee; 
+            padding-top: 10px; 
+            margin: 0 20mm; 
+        }
 
         @media print {
             .sidebar { display: none !important; }
             .preview { padding: 0 !important; background: none !important; display: block !important; }
-            .page { width: 100% !important; box-shadow: none !important; margin: 0 !important; padding: 10mm !important; }
+            .page { 
+                width: 100% !important; 
+                height: 100% !important;
+                box-shadow: none !important; 
+                margin: 0 !important; 
+                padding: 10mm 15mm !important; 
+            }
             .app { display: block !important; }
         }
     </style>
 </head>
 <body>
     <div class="app">
-        <div class="sidebar">
+        <aside class="sidebar">
             <div class="brand">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                <h1>Chess Generator</h1>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <h1>Chess Worksheet</h1>
             </div>
-            
+
             <div class="form-group">
-                <label>Academy / Title</label>
+                <label>Worksheet Title</label>
                 <input type="text" id="wsTitle" value="EduChess Academy Puzzle Worksheet">
             </div>
+
             <div class="form-group">
                 <label>Contact Info</label>
                 <input type="text" id="wsContact" value="+91 0000 0000 00">
             </div>
+
             <div class="form-group">
                 <label>Instructions</label>
-                <input type="text" id="wsSub" value="Solve the positions. Best move for the side to play.">
+                <input type="text" id="wsSub" value="Solve the positions. White or Black to move is shown below each board.">
             </div>
+
             <div class="form-group">
-                <label>Logo</label>
+                <label>Academy Logo</label>
                 <input type="file" id="logoIn" accept="image/*">
             </div>
+
             <div class="form-group">
-                <label>FENs (One per line)</label>
+                <label>FEN Positions (one per line)</label>
                 <textarea id="fens" spellcheck="false">r1bqkbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R w KQkq - 2 4
 2r3k1/5ppp/p2b4/1p1P4/1P6/P3R1P1/5P1P/4R1K1 w - - 0 1
 6k1/5pp1/7p/8/8/5P2/5KPP/8 w - - 0 1
@@ -144,83 +276,131 @@ r2q1rk1/ppp2ppp/2n2n2/3bp3/3P4/2PB1N2/PP3PPP/RNBQ1RK1 w - - 0 1
 8/2p5/1p1p4/p2Ppk2/P1P1P3/3K4/8/8 w - - 0 1
 2r3k1/5pp1/p6p/1p1P4/1P3P2/P5P1/6KP/2R5 w - - 0 1</textarea>
             </div>
+
             <div class="actions">
-                <button class="btn btn-primary" onclick="window.print()">Print PDF</button>
-                <button class="btn btn-secondary" onclick="document.getElementById('fens').value=''; render()">Clear</button>
+                <button class="btn btn-primary" onclick="window.print()">Print Worksheet</button>
+                <button class="btn btn-secondary" onclick="clearFens()">Clear FENs</button>
             </div>
-        </div>
-        <div class="preview">
-            <div id="page" class="page"></div>
-        </div>
+        </aside>
+
+        <main class="preview">
+            <div class="page" id="page">
+                <!-- Content generated by JS -->
+            </div>
+        </main>
     </div>
 
     <script>
-        const symbols = { 'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙', 'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟' };
+        const symbols = {
+            'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙',
+            'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟'
+        };
+
         let logoData = null;
 
         function render() {
             const title = document.getElementById('wsTitle').value;
             const contact = document.getElementById('wsContact').value;
             const sub = document.getElementById('wsSub').value;
-            const rawFens = document.getElementById('fens').value.split('
-');
-            const fenList = rawFens.map(f => f.trim()).filter(f => f.split('/').length === 8).slice(0, 9);
+            const fensText = document.getElementById('fens').value;
+            
+            // Split by newline and filter valid FENs
+            const fenList = fensText.split('
+')
+                .map(f => f.trim())
+                .filter(f => f.length > 0 && f.includes('/'))
+                .slice(0, 9);
 
             let html = `
                 <div class="header">
-                    <div class="logo-box">${logoData ? `<img src="${logoData}">` : 'LOGO'}</div>
+                    <div class="logo-box">${logoData ? `<img src="${logoData}">` : 'No Logo'}</div>
                     <div class="title-block">
                         <h2>${title}</h2>
                         <p>${sub}</p>
                     </div>
-                    <div class="contact"><strong>Contact</strong><br>${contact}</div>
+                    <div class="contact">
+                        <strong>Contact</strong><br>${contact}
+                    </div>
                 </div>
                 <div class="grid">
                     ${fenList.map((f, i) => createPuzzle(f, i)).join('')}
                 </div>
-                <div class="footer-ws">Generated by Chess Worksheet Pro</div>
+                <div class="footer-ws">EduChess Academy Puzzle Worksheet • Generated by Chess Worksheet Pro</div>
             `;
             document.getElementById('page').innerHTML = html;
         }
 
         function createPuzzle(fen, idx) {
-            const parts = fen.trim().split(/\s+/);
-            const board = parts[0];
-            const side = parts[1] || 'w';
-            const rows = board.split('/').map(r => {
+            const parts = fen.split(' ');
+            const boardStr = parts[0];
+            const turn = parts[1] || 'w';
+            
+            const rows = boardStr.split('/').map(r => {
                 const row = [];
                 for (const char of r) {
-                    if (/\d/.test(char)) for (let i = 0; i < parseInt(char); i++) row.push('');
-                    else row.push(char);
+                    if (/\d/.test(char)) {
+                        for (let i = 0; i < parseInt(char); i++) row.push('');
+                    } else {
+                        row.push(char);
+                    }
                 }
                 return row;
             });
 
-            let h = `<div class="puzzle">
-                <div class="p-meta"><span>Puzzle ${idx + 1}</span><span>${side === 'w' ? 'White' : 'Black'} to move</span></div>
-                <div class="board-wrap"><div class="board">`;
-            
+            let h = `
+                <div class="puzzle">
+                    <div class="p-meta">
+                        <span>Puzzle ${idx + 1}</span>
+                        <span>${turn === 'w' ? 'White' : 'Black'} to move</span>
+                    </div>
+                    <div class="board-wrap">
+                        <div class="board">
+            `;
+
             for (let r = 0; r < 8; r++) {
                 for (let c = 0; c < 8; c++) {
                     const isLight = (r + c) % 2 === 0;
+                    const piece = rows[r][c];
                     h += `<div class="square ${isLight ? 'light' : 'dark'}">`;
-                    if (rows[r][c]) h += `<span class="piece">${symbols[rows[r][c]]}</span>`;
+                    if (piece) {
+                        h += `<span class="piece">${symbols[piece] || ''}</span>`;
+                    }
                     if (r === 7) h += `<span class="coord f">${'abcdefgh'[c]}</span>`;
                     if (c === 0) h += `<span class="coord r">${8 - r}</span>`;
                     h += `</div>`;
                 }
             }
-            h += `</div></div><div class="move-text">${side === 'w' ? 'White' : 'Black'} to move</div></div>`;
+
+            h += `
+                        </div>
+                    </div>
+                    <div class="move-text">${turn === 'w' ? 'White' : 'Black'} to move</div>
+                </div>
+            `;
             return h;
         }
 
-        document.querySelectorAll('input, textarea').forEach(el => el.addEventListener('input', render));
-        document.getElementById('logoIn').addEventListener('change', e => {
-            const reader = new FileReader();
-            reader.onload = () => { logoData = reader.result; render(); };
-            reader.readAsDataURL(e.target.files[0]);
+        function clearFens() {
+            document.getElementById('fens').value = '';
+            render();
+        }
+
+        document.querySelectorAll('input, textarea').forEach(el => {
+            el.addEventListener('input', render);
         });
 
+        document.getElementById('logoIn').addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                logoData = reader.result;
+                render();
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Initial render
         render();
     </script>
 </body>
