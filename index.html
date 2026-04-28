@@ -7,7 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
     <style>
         :root {
             --primary: #0b6b6f;
@@ -17,145 +16,119 @@
             --text: #1e293b;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --radius: 16px;
-            --board-light: #dee3e6;
-            --board-dark: #8ca2ad;
+            --radius: 12px;
+            --board-light: #ffffff;
+            --board-dark: #d1d5db; /* Visible grey for print */
         }
 
-        * { box-sizing: border-box; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.4; }
 
-        .app { display: grid; grid-template-columns: 380px 1fr; height: 100vh; }
+        .app { display: grid; grid-template-columns: 350px 1fr; height: 100vh; }
 
         .sidebar {
             background: #fff;
-            padding: 40px 24px;
+            padding: 30px 20px;
             border-right: 1px solid var(--border);
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 28px;
-            box-shadow: 10px 0 30px rgba(0,0,0,0.02);
+            gap: 20px;
             z-index: 10;
         }
 
         .preview {
-            padding: 50px;
+            padding: 30px;
             overflow-y: auto;
             display: flex;
             justify-content: center;
-            background: #e2e8f0;
+            background: #cbd5e1;
         }
 
-        .brand { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
-        .brand svg { width: 36px; height: 36px; color: var(--primary); }
-        .brand h1 { font-family: 'Libre Baskerville', serif; font-size: 24px; margin: 0; font-weight: 700; }
+        .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+        .brand svg { width: 30px; height: 30px; color: var(--primary); }
+        .brand h1 { font-family: 'Libre Baskerville', serif; font-size: 20px; margin: 0; }
 
         .form-group { margin-bottom: 0; }
-        label { display: block; font-weight: 700; font-size: 12px; margin-bottom: 8px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        label { display: block; font-weight: 700; font-size: 11px; margin-bottom: 6px; color: var(--text-muted); text-transform: uppercase; }
         input, textarea { 
             width: 100%; 
-            padding: 14px 18px; 
+            padding: 10px 14px; 
             border: 2px solid var(--border); 
-            border-radius: 12px; 
-            font-size: 14px; 
+            border-radius: 8px; 
+            font-size: 13px; 
             background: #f8fafc;
-            transition: all 0.2s;
-            font-family: inherit;
         }
-        input:focus, textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(11, 107, 111, 0.1); }
-        textarea { height: 220px; font-family: 'JetBrains Mono', monospace; line-height: 1.5; }
+        textarea { height: 160px; font-family: monospace; }
 
-        .actions { display: flex; gap: 14px; margin-top: 12px; }
+        .actions { display: flex; gap: 10px; }
         .btn { 
-            flex: 1; 
-            padding: 16px; 
-            border-radius: 40px; 
-            font-weight: 700; 
-            cursor: pointer; 
-            border: none; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            font-size: 14px; 
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            flex: 1; padding: 12px; border-radius: 30px; font-weight: 700; cursor: pointer; border: none; font-size: 13px; text-align: center;
         }
-        .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(11, 107, 111, 0.2); }
-        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(11, 107, 111, 0.3); }
+        .btn-primary { background: var(--primary); color: #fff; }
         .btn-secondary { background: #fff; border: 2px solid var(--border); color: var(--text); }
-        .btn-secondary:hover { background: #f1f5f9; border-color: #cbd5e1; }
 
         .page {
             width: 210mm;
-            min-height: 297mm;
+            height: 297mm;
             background: #fff;
-            padding: 15mm 20mm;
-            box-shadow: 0 20px 80px rgba(0,0,0,0.15);
+            padding: 10mm 15mm;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             position: relative;
             color: #000;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .header {
             display: grid;
-            grid-template-columns: 100px 1fr 140px;
+            grid-template-columns: 80px 1fr 120px;
             align-items: center;
-            gap: 30px;
-            border-bottom: 4px solid #000;
-            padding-bottom: 25px;
-            margin-bottom: 35px;
+            gap: 15px;
+            border-bottom: 3px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
         }
 
-        .logo-box {
-            width: 90px;
-            height: 90px;
-            border: 2px dashed #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 10px;
-            color: #94a3b8;
-            text-align: center;
-            border-radius: 12px;
-            padding: 8px;
-        }
-        .logo-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .logo-box { width: 70px; height: 70px; border: 1.5px dashed #ccc; display: flex; align-items: center; justify-content: center; font-size: 9px; border-radius: 8px; }
+        .logo-box img { max-width: 100%; max-height: 100%; }
 
         .title-block { text-align: center; }
-        .title-block h2 { font-family: 'Libre Baskerville', serif; font-size: 30px; margin: 0; letter-spacing: -0.02em; }
-        .title-block p { font-size: 15px; color: #475569; margin: 12px 0 0; font-weight: 500; }
+        .title-block h2 { font-family: 'Libre Baskerville', serif; font-size: 22px; margin: 0; }
+        .title-block p { font-size: 12px; color: #444; margin: 5px 0 0; font-weight: 500; }
 
-        .contact { text-align: right; font-size: 12px; line-height: 1.6; }
+        .contact { text-align: right; font-size: 10px; line-height: 1.4; }
 
         .grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15mm 12mm;
+            grid-template-rows: repeat(3, 1fr);
+            gap: 8mm 10mm;
+            flex-grow: 1;
         }
 
         .puzzle {
-            break-inside: avoid;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
         }
 
         .p-meta {
             display: flex;
             justify-content: space-between;
             font-weight: 900;
-            font-size: 13px;
-            border-bottom: 2px solid #000;
-            margin-bottom: 8px;
-            padding-bottom: 4px;
+            font-size: 11px;
+            border-bottom: 1.5px solid #000;
+            margin-bottom: 4px;
+            padding-bottom: 2px;
         }
 
         .board-wrap {
             width: 100%;
             aspect-ratio: 1/1;
+            border: 1.5px solid #000;
             position: relative;
-            border: 2px solid #000;
         }
 
         .board {
@@ -166,75 +139,48 @@
             height: 100%;
         }
 
-        .square {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
+        .square { display: flex; align-items: center; justify-content: center; position: relative; }
         .light { background: var(--board-light); }
         .dark { background: var(--board-dark); }
 
-        .piece {
-            font-size: 44px; /* Increased for better visual impact */
-            line-height: 1;
-            z-index: 2;
-            user-select: none;
-            margin-top: -2px;
-        }
+        .piece { font-size: 30px; line-height: 1; z-index: 2; }
 
-        .coord {
-            position: absolute;
-            font-size: 7px;
-            font-weight: 900;
-            font-family: 'Inter', sans-serif;
-            z-index: 1;
-            pointer-events: none;
-        }
-        .coord.f { right: 2px; bottom: 1px; }
-        .coord.r { left: 2px; top: 1px; }
+        .coord { position: absolute; font-size: 6px; font-weight: 900; z-index: 1; }
+        .coord.f { right: 1px; bottom: 0px; }
+        .coord.r { left: 1px; top: 0px; }
         
-        .light .coord { color: var(--board-dark); }
-        .dark .coord { color: var(--board-light); }
+        .light .coord { color: #666; }
+        .dark .coord { color: #333; }
 
         .move-text {
             text-align: center;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 900;
-            margin-top: 10px;
-            padding: 6px;
-            border: 2px solid #000;
-            background: #fff;
+            margin-top: 6px;
+            padding: 4px;
+            border: 1.5px solid #000;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
 
         .footer-ws {
-            position: absolute;
-            bottom: 12mm;
-            left: 0;
-            right: 0;
             text-align: center;
-            font-size: 11px;
-            color: #94a3b8;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 15px;
-            margin: 0 20mm;
-            font-weight: 600;
+            font-size: 10px;
+            color: #999;
+            border-top: 1px solid #eee;
+            padding-top: 8px;
+            margin-top: 10px;
         }
 
         @media print {
+            body { background: #fff; }
             .sidebar { display: none !important; }
-            .preview { padding: 0 !important; background: none !important; display: block !important; }
+            .preview { padding: 0 !important; background: none !important; }
             .page { 
-                width: 100% !important; 
-                height: 100% !important; 
-                box-shadow: none !important; 
-                margin: 0 !important; 
-                padding: 10mm 15mm !important; 
+                width: 210mm; height: 297mm; box-shadow: none !important; margin: 0 !important; 
+                padding: 10mm 15mm !important;
             }
-            .app { display: block !important; }
-            .piece { font-size: 32px; }
+            .dark { background-color: #d1d5db !important; } /* Force color for print */
+            .light { background-color: #ffffff !important; }
         }
     </style>
 </head>
@@ -246,30 +192,11 @@
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 19H5V5h14v14zM5 3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5z"/></svg>
             <h1>Chess Worksheet</h1>
         </div>
-
-        <div class="form-group">
-            <label>Worksheet Title</label>
-            <input type="text" id="wsTitle" value="EduChess Academy Puzzle Worksheet">
-        </div>
-
-        <div class="form-group">
-            <label>Contact Info</label>
-            <input type="text" id="wsContact" value="+91 0000 0000 00">
-        </div>
-
-        <div class="form-group">
-            <label>Instructions</label>
-            <input type="text" id="wsSub" value="Solve the positions. White or Black to move is shown below each board.">
-        </div>
-
-        <div class="form-group">
-            <label>Academy Logo</label>
-            <input type="file" id="logoIn" accept="image/*">
-        </div>
-
-        <div class="form-group">
-            <label>FEN Positions (one per line)</label>
-            <textarea id="fens" spellcheck="false" placeholder="Paste FENs here...">r1bqkbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R w KQkq - 2 4
+        <div class="form-group"><label>Title</label><input type="text" id="wsTitle" value="EduChess Academy Puzzle Worksheet"></div>
+        <div class="form-group"><label>Contact</label><input type="text" id="wsContact" value="+91 0000 0000 00"></div>
+        <div class="form-group"><label>Sub</label><input type="text" id="wsSub" value="Solve the positions. White or Black to move is shown below each board."></div>
+        <div class="form-group"><label>Logo</label><input type="file" id="logoIn" accept="image/*"></div>
+        <div class="form-group"><label>FENs (9 Puzzles)</label><textarea id="fens" spellcheck="false" placeholder="Paste FENs here...">r1bqkbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R w KQkq - 2 4
 2r3k1/5ppp/p2b4/1p1P4/1P6/P3R1P1/5P1P/4R1K1 w - - 0 1
 6k1/5pp1/7p/8/8/5P2/5KPP/8 w - - 0 1
 r4rk1/pp1n1ppp/2pbpn2/q7/3P4/2N1PN2/PPQ2PPP/R1B2RK1 w - - 0 1
@@ -277,26 +204,17 @@ r4rk1/pp1n1ppp/2pbpn2/q7/3P4/2N1PN2/PPQ2PPP/R1B2RK1 w - - 0 1
 6k1/1p3pp1/p6p/3P4/1P6/P5PP/5PK1/8 w - - 0 1
 r2q1rk1/ppp2ppp/2n2n2/3bp3/3P4/2PB1N2/PP3PPP/RNBQ1RK1 w - - 0 1
 8/2p5/1p1p4/p2Ppk2/P1P1P3/3K4/8/8 w - - 0 1
-2r3k1/5pp1/p6p/1p1P4/1P3P2/P5P1/6KP/2R5 w - - 0 1</textarea>
-        </div>
-
+2r3k1/5pp1/p6p/1p1P4/1P3P2/P5P1/6KP/2R5 w - - 0 1</textarea></div>
         <div class="actions">
             <button class="btn btn-primary" onclick="window.print()">Print Worksheet</button>
             <button class="btn btn-secondary" onclick="clearFens()">Clear FENS</button>
         </div>
     </div>
-
-    <div class="preview">
-        <div class="page" id="page"></div>
-    </div>
+    <div class="preview"><div class="page" id="page"></div></div>
 </div>
 
 <script>
-    const symbols = {
-        'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙',
-        'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟'
-    };
-
+    const symbols = { 'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙', 'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟' };
     let logoData = null;
 
     function render() {
@@ -305,27 +223,17 @@ r2q1rk1/ppp2ppp/2n2n2/3bp3/3P4/2PB1N2/PP3PPP/RNBQ1RK1 w - - 0 1
         const sub = document.getElementById('wsSub').value;
         const fensText = document.getElementById('fens').value;
         
-        // Very flexible FEN matching
-        const fenList = fensText.match(/[rnbqkpRNBQKP1-8/]+\s+[wb]\s+[KQkq-]+\s+[a-h0-9-]+\s+\d+\s+\d+/g) || 
-                        fensText.match(/[rnbqkpRNBQKP1-8/]+\s+[wb]/g) || [];
-                        
-        const cleanFens = fenList.map(f => f.trim()).filter(f => f.length > 5).slice(0, 9);
+        const fenList = fensText.match(/[rnbqkpRNBQKP1-8/]+\s+[wb]/g) || [];
+        const cleanFens = fenList.map(f => f.trim()).slice(0, 9);
 
         let html = `
             <div class="header">
-                <div class="logo-box">${logoData ? `<img src="${logoData}">` : 'NO LOGO'}</div>
-                <div class="title-block">
-                    <h2>${title}</h2>
-                    <p>${sub}</p>
-                </div>
-                <div class="contact">
-                    <strong>Contact</strong><br>${contact}
-                </div>
+                <div class="logo-box">${logoData ? `<img src="${logoData}">` : 'LOGO'}</div>
+                <div class="title-block"><h2>${title}</h2><p>${sub}</p></div>
+                <div class="contact"><strong>Contact</strong><br>${contact}</div>
             </div>
-            <div class="grid">
-                ${cleanFens.map((f, i) => createPuzzle(f, i)).join('')}
-            </div>
-            <div class="footer-ws">EduChess Academy Puzzle Worksheet • Generated by Chess Worksheet Pro</div>
+            <div class="grid">${cleanFens.map((f, i) => createPuzzle(f, i)).join('')}</div>
+            <div class="footer-ws">EduChess Academy • generated by Chess Worksheet Pro</div>
         `;
         document.getElementById('page').innerHTML = html;
     }
@@ -334,75 +242,44 @@ r2q1rk1/ppp2ppp/2n2n2/3bp3/3P4/2PB1N2/PP3PPP/RNBQ1RK1 w - - 0 1
         const parts = fen.split(/\s+/);
         const boardStr = parts[0];
         const turn = parts[1] || 'w';
-        
         const rows = boardStr.split('/').map(r => {
             const row = [];
             for (const char of r) {
-                if (/\d/.test(char)) {
-                    for (let i = 0; i < parseInt(char); i++) row.push('');
-                } else {
-                    row.push(char);
-                }
+                if (/\d/.test(char)) { for (let i = 0; i < parseInt(char); i++) row.push(''); }
+                else { row.push(char); }
             }
             return row;
         });
 
         let h = `
             <div class="puzzle">
-                <div class="p-meta">
-                    <span>Puzzle ${idx + 1}</span>
-                    <span>${turn === 'w' ? 'White' : 'Black'} to move</span>
-                </div>
-                <div class="board-wrap">
-                    <div class="board">
+                <div class="p-meta"><span>Puzzle ${idx + 1}</span><span>${turn === 'w' ? 'White' : 'Black'} to move</span></div>
+                <div class="board-wrap"><div class="board">
         `;
-
         for (let r = 0; r < 8; r++) {
             for (let c = 0; c < 8; c++) {
                 const isLight = (r + c) % 2 === 0;
                 const piece = rows[r][c];
                 h += `<div class="square ${isLight ? 'light' : 'dark'}">`;
-                
-                if (piece) {
-                    h += `<span class="piece">${symbols[piece] || ''}</span>`;
-                }
-
+                if (piece) h += `<span class="piece">${symbols[piece] || ''}</span>`;
                 if (r === 7) h += `<span class="coord f">${'abcdefgh'[c]}</span>`;
                 if (c === 0) h += `<span class="coord r">${8 - r}</span>`;
-                
                 h += `</div>`;
             }
         }
-
-        h += `
-                    </div>
-                </div>
-                <div class="move-text">${turn === 'w' ? 'White' : 'Black'} to move</div>
-            </div>
-        `;
+        h += `</div></div><div class="move-text">${turn === 'w' ? 'White' : 'Black'} to move</div></div>`;
         return h;
     }
 
-    function clearFens() {
-        document.getElementById('fens').value = '';
-        render();
-    }
-
-    document.querySelectorAll('input, textarea').forEach(el => {
-        el.addEventListener('input', render);
-    });
-
+    function clearFens() { document.getElementById('fens').value = ''; render(); }
+    document.querySelectorAll('input, textarea').forEach(el => el.addEventListener('input', render));
     document.getElementById('logoIn').addEventListener('change', e => {
         const file = e.target.files[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = () => {
-            logoData = reader.result;
-            render();
-        };
+        reader.onload = () => { logoData = reader.result; render(); };
         reader.readAsDataURL(file);
     });
-
     render();
 </script>
 </body>
