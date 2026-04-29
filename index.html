@@ -6,9 +6,9 @@
     <title>Chess Worksheet Generator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root { --primary: #0b6b6f; --primary-hover: #095357; --bg: #f8fafc; --surface: #ffffff; --text: #1e293b; --text-muted: #64748b; --border: #e2e8f0; --radius: 12px; --board-light: #ffffff; --board-dark: #cbd5e1; }
+:root { --primary: #0b6b6f; --primary-hover: #095357; --bg: #f8fafc; --surface: #ffffff; --text: #1e293b; --text-muted: #64748b; --border: #e2e8f0; --radius: 12px; --board-light: #f0d9b5; --board-dark: #b58863; }
 * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.4; }
 .app { display: grid; grid-template-columns: 350px 1fr; height: 100vh; }
@@ -35,14 +35,14 @@ textarea { height: 160px; font-family: monospace; }
 .board-wrap { width: 100%; aspect-ratio: 1/1; border: 1.5px solid #000; position: relative; }
 .board { display: grid; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr); width: 100%; height: 100%; }
 .square { display: flex; align-items: center; justify-content: center; position: relative; }
-.light { background: #ffffff; }
-.dark { background: #cbd5e1; }
-.piece { font-family: 'Noto Sans Symbols 2', 'Segoe UI Symbol', 'Apple Color Emoji', sans-serif; font-size: 24px; line-height: 1; z-index: 2; }
-.coord { position: absolute; font-size: 7px; font-weight: 900; z-index: 1; opacity: 0.7; }
+.light { background: var(--board-light); }
+.dark { background: var(--board-dark); }
+.piece { width: 80%; height: 80%; background-size: contain; background-repeat: no-repeat; background-position: center; }
+.coord { position: absolute; font-size: 7px; font-weight: 900; z-index: 1; opacity: 0.7; font-family: sans-serif; }
 .coord.f { right: 1px; bottom: 0px; }
 .coord.r { left: 1px; top: 0px; }
-.light .coord { color: #666; }
-.dark .coord { color: #333; }
+.light .coord { color: #333; }
+.dark .coord { color: #000; }
 .move-text { text-align: center; font-size: 9px; font-weight: 900; margin-top: 5px; padding: 3px; border: 1.5px solid #000; text-transform: uppercase; background: #fff; }
 .footer-ws { text-align: center; font-size: 9px; color: #999; border-top: 1px solid #eee; padding-top: 8px; margin-top: 5px; }
 
@@ -60,10 +60,10 @@ textarea { height: 160px; font-family: monospace; }
   .board { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; display: grid !important; grid-template-columns: repeat(8, 1fr) !important; grid-template-rows: repeat(8, 1fr) !important; }
   .square { display: flex !important; align-items: center !important; justify-content: center !important; overflow: hidden !important; }
   .move-text { font-size: 7px !important; margin-top: 2px !important; padding: 2px !important; flex-shrink: 0 !important; }
-  .piece { font-family: 'Noto Sans Symbols 2', 'Segoe UI Symbol', 'Apple Color Emoji', sans-serif !important; font-size: 14px !important; line-height: 1 !important; z-index: 2 !important; }
+  .piece { width: 80% !important; height: 80% !important; }
   .coord { font-size: 4.5px !important; }
-  .dark { background-color: #cbd5e1 !important; }
-  .light { background-color: #ffffff !important; }
+  .dark { background-color: var(--board-dark) !important; }
+  .light { background-color: var(--board-light) !important; }
   .footer-ws { display: none !important; }
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 }
@@ -105,7 +105,20 @@ textarea { height: 160px; font-family: monospace; }
   </div>
 </div>
 <script>
-const symbols = { 'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙', 'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟' };
+const pieceImages = {
+  'K': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/wK.svg',
+  'Q': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/wQ.svg',
+  'R': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/wR.svg',
+  'B': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/wB.svg',
+  'N': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/wN.svg',
+  'P': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/wP.svg',
+  'k': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/bK.svg',
+  'q': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/bQ.svg',
+  'r': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/bR.svg',
+  'b': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/bB.svg',
+  'n': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/bN.svg',
+  'p': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/bP.svg'
+};
 let logoData = null;
 
 function render() {
@@ -114,7 +127,6 @@ function render() {
   const sub = document.getElementById('wsSub').value;
   const fensText = document.getElementById('fens').value;
   
-  // Parse FENs line-by-line
   const lines = fensText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
   const cleanFens = lines.slice(0, 9);
   
@@ -151,7 +163,9 @@ function createPuzzle(fen, idx) {
       const isLight = (r + c) % 2 === 0;
       const piece = rows[r][c];
       h += '<div class="square ' + (isLight ? 'light' : 'dark') + '">';
-      if (piece) h += '<span class="piece">' + (symbols[piece] || '') + '</span>';
+      if (piece && pieceImages[piece]) {
+        h += '<div class="piece" style="background-image: url(' + pieceImages[piece] + ')"></div>';
+      }
       if (r === 7) h += '<span class="coord f">' + 'abcdefgh'[c] + '</span>';
       if (c === 0) h += '<span class="coord r">' + (8 - r) + '</span>';
       h += '</div>';
