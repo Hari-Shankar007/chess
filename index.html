@@ -21,7 +21,7 @@
         input, textarea { width: 100%; padding: 10px 14px; border: 2px solid var(--border); border-radius: 8px; font-size: 13px; background: #f8fafc; }
         textarea { height: 160px; font-family: monospace; }
         .btn { width: 100%; padding: 12px; border-radius: 30px; font-weight: 700; cursor: pointer; border: none; font-size: 13px; text-align: center; background: var(--primary); color: #fff; }
-        .page { width: 210mm; height: 297mm; background: #fff; padding: 12mm 15mm; box-shadow: 0 10px 40px rgba(0,0,0,0.1); position: relative; color: #000; overflow: hidden; display: flex; flex-direction: column; }
+                .page { width: 210mm; height: 297mm; background: #fff; padding: 12mm 15mm; box-sizing: border-box; box-shadow: 0 10px 40px rgba(0,0,0,0.1); position: relative; color: #000; display: flex; flex-direction: column; }
         .header { display: grid; grid-template-columns: 80px 1fr 140px; align-items: center; gap: 15px; border-bottom: 3px solid #000; padding-bottom: 12px; margin-bottom: 15px; }
         .logo-box { width: 70px; height: 70px; border: 1.5px dashed #ccc; display: flex; align-items: center; justify-content: center; font-size: 9px; border-radius: 8px; }
         .logo-box img { max-width: 100%; max-height: 100%; }
@@ -49,10 +49,10 @@
                 body { background: #fff !important; }
         .sidebar { display: none !important; }
         .preview { padding: 0 !important; background: none !important; display: block !important; }
-        .page { width: 210mm !important; height: 297mm !important; box-sizing: border-box !important; background: #fff !important; box-shadow: none !important; margin: 0 !important; padding: 8mm !important; page-break-after: always; display: flex !important; flex-direction: column !important; overflow: hidden !important; }
+        .page { width: 210mm !important; height: 297mm !important; box-sizing: border-box !important; background: #fff !important; box-shadow: none !important; margin: 0 !important; padding: 8mm !important; page-break-after: always; display: flex !important; flex-direction: column !important; overflow: visible !important; }
         .header { flex-shrink: 0 !important; padding-bottom: 4px !important; margin-bottom: 4px !important; border-bottom: 2px solid #000 !important; }
         .grid { display: grid !important; grid-template-columns: repeat(3, 61mm) !important; grid-template-rows: repeat(3, 84mm) !important; gap: 4mm !important; flex: 1 !important; justify-content: space-between !important; }
-        .puzzle { display: flex !important; flex-direction: column !important; width: 61mm !important; overflow: hidden !important; }
+        .puzzle { display: flex !important; flex-direction: column !important; width: 61mm !important; overflow: visible !important; }
         .p-meta { font-size: 7px !important; padding-bottom: 1px !important; margin-bottom: 1px !important; flex-shrink: 0 !important; }
         .board-wrap { width: 61mm !important; height: 61mm !important; flex-shrink: 0 !important; border: 1.5px solid #000 !important; position: relative !important; display: block !important; }
         .board { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; display: grid !important; grid-template-columns: repeat(8, 1fr) !important; grid-template-rows: repeat(8, 1fr) !important; }
