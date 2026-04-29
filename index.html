@@ -46,18 +46,20 @@
         .move-text { text-align: center; font-size: 9px; font-weight: 900; margin-top: 5px; padding: 3px; border: 1.5px solid #000; text-transform: uppercase; background: #fff; }
         .footer-ws { text-align: center; font-size: 9px; color: #999; border-top: 1px solid #eee; padding-top: 8px; margin-top: 5px; }
         @media print {
-            body { background: #fff !important; }
-            .sidebar { display: none !important; }
-            .preview { padding: 0 !important; background: none !important; display: block !important; }
-            .page { width: 210mm !important; height: 297mm !important; box-shadow: none !important; margin: 0 !important; padding: 10mm 15mm !important; page-break-after: always; }
-            .dark { background-color: #cbd5e1 !important; }
-            .light { background-color: #ffffff !important; }
-            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-                    .grid { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; grid-template-rows: repeat(3, 1fr) !important; height: 220mm !important; gap: 8mm 10mm !important; }
-        .puzzle { display: flex !important; flex-direction: column !important; width: 100% !important; height: 100% !important; }
-        .board-wrap { width: 100% !important; aspect-ratio: unset !important; height: 0 !important; padding-bottom: 100% !important; position: relative !important; overflow: hidden !important; }
-        .board { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; }
-        }
+        body { background: #fff !important; }
+        .sidebar { display: none !important; }
+        .preview { padding: 0 !important; background: none !important; display: block !important; }
+        .page { width: 210mm !important; height: 297mm !important; box-sizing: border-box !important; box-shadow: none !important; margin: 0 !important; padding: 8mm 10mm !important; page-break-after: always; display: flex !important; flex-direction: column !important; }
+        .header { margin-bottom: 6px !important; padding-bottom: 6px !important; flex-shrink: 0 !important; }
+        .grid { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; grid-template-rows: repeat(3, 1fr) !important; gap: 5mm 6mm !important; flex: 1 1 auto !important; min-height: 0 !important; }
+        .puzzle { display: flex !important; flex-direction: column !important; min-height: 0 !important; overflow: hidden !important; }
+        .board-wrap { flex: 1 1 auto !important; min-height: 0 !important; aspect-ratio: 1 / 1 !important; width: 100% !important; max-width: 100% !important; border: 1.5px solid #000 !important; position: relative !important; }
+        .board { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; display: grid !important; grid-template-columns: repeat(8, 1fr) !important; grid-template-rows: repeat(8, 1fr) !important; }
+        .dark { background-color: #cbd5e1 !important; }
+        .light { background-color: #ffffff !important; }
+        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .move-text, .footer-ws, .p-meta { font-size: 8px !important; }
+        .piece { font-size: 18px !important; }
     </style>
 </head>
 <body>
