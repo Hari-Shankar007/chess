@@ -53,6 +53,10 @@
             .dark { background-color: #cbd5e1 !important; }
             .light { background-color: #ffffff !important; }
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                    .grid { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; grid-template-rows: repeat(3, 1fr) !important; height: 220mm !important; gap: 8mm 10mm !important; }
+        .puzzle { display: flex !important; flex-direction: column !important; width: 100% !important; height: 100% !important; }
+        .board-wrap { width: 100% !important; aspect-ratio: unset !important; height: 0 !important; padding-bottom: 100% !important; position: relative !important; overflow: hidden !important; }
+        .board { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; }
         }
     </style>
 </head>
