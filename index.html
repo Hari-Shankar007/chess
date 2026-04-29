@@ -46,24 +46,24 @@
         .move-text { text-align: center; font-size: 9px; font-weight: 900; margin-top: 5px; padding: 3px; border: 1.5px solid #000; text-transform: uppercase; background: #fff; }
         .footer-ws { text-align: center; font-size: 9px; color: #999; border-top: 1px solid #eee; padding-top: 8px; margin-top: 5px; }
         @media print {
-                body { background: #fff !important; }
+        body { background: #fff !important; }
         .sidebar { display: none !important; }
         .preview { padding: 0 !important; background: none !important; display: block !important; }
-        .page { width: 210mm !important; height: 297mm !important; box-sizing: border-box !important; background: #fff !important; box-shadow: none !important; margin: 0 !important; padding: 8mm !important; page-break-after: always; display: flex !important; flex-direction: column !important; overflow: visible !important; }
+        .page { width: 210mm !important; height: 297mm !important; box-sizing: border-box !important; background: #fff !important; box-shadow: none !important; margin: 0 !important; padding: 8mm !important; page-break-after: always; display: flex !important; flex-direction: column !important; overflow: hidden !important; }
         .header { flex-shrink: 0 !important; padding-bottom: 4px !important; margin-bottom: 4px !important; border-bottom: 2px solid #000 !important; }
-        .grid { display: grid !important; grid-template-columns: repeat(3, 61mm) !important; grid-template-rows: repeat(3, 82mm) !important; gap: 4mm !important; flex: 1 !important; justify-content: space-between !important; }
-        .puzzle { display: flex !important; flex-direction: column !important; width: 61mm !important; overflow: visible !important; }
+        .grid { display: grid !important; grid-template-columns: repeat(3, 61mm) !important; grid-template-rows: repeat(3, 82mm) !important; gap: 4mm !important; flex: 1 !important; justify-content: space-between !important; align-content: space-between !important; }
+        .puzzle { display: flex !important; flex-direction: column !important; width: 61mm !important; }
         .p-meta { font-size: 7px !important; padding-bottom: 1px !important; margin-bottom: 1px !important; flex-shrink: 0 !important; }
-        .board-wrap { width: 61mm !important; height: 61mm !important; flex-shrink: 0 !important; border: 1.5px solid #000 !important; position: relative !important; display: block !important; }
+        .board-wrap { width: 61mm !important; height: 61mm !important; flex-shrink: 0 !important; border: 1.5px solid #000 !important; position: relative !important; display: block !important; overflow: hidden !important; }
         .board { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; display: grid !important; grid-template-columns: repeat(8, 1fr) !important; grid-template-rows: repeat(8, 1fr) !important; }
+        .square { display: flex !important; align-items: center !important; justify-content: center !important; overflow: hidden !important; }
         .move-text { font-size: 7px !important; margin-top: 2px !important; padding: 2px !important; }
-        .piece { font-size: 16px !important; line-height: 1 !important; }
-        .coord { font-size: 5px !important; }
+        .piece { font-size: 14px !important; line-height: 1 !important; z-index: 2 !important; }
+        .coord { font-size: 4.5px !important; }
         .dark { background-color: #cbd5e1 !important; }
         .light { background-color: #ffffff !important; }
         * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    </style>
-</head>
+    }
 <body>
     <div class="app">
         <div class="sidebar">
