@@ -1,206 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chess Worksheet Generator</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-:root { --primary: #0b6b6f; --primary-hover: #095357; --bg: #f8fafc; --surface: #ffffff; --text: #1e293b; --text-muted: #64748b; --border: #e2e8f0; --radius: 12px; --board-light: #f0d9b5; --board-dark: #b58863; }
-* { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.4; }
-.app { display: grid; grid-template-columns: 350px 1fr; height: 100vh; }
-.sidebar { background: #fff; padding: 30px 20px; border-right: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; gap: 20px; z-index: 10; }
-.preview { padding: 30px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; gap: 30px; background: #cbd5e1; }
-.brand { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
-.brand svg { width: 30px; height: 30px; color: var(--primary); }
-.brand h1 { font-family: 'Libre Baskerville', serif; font-size: 20px; margin: 0; }
-label { display: block; font-weight: 700; font-size: 11px; margin-bottom: 6px; color: var(--text-muted); text-transform: uppercase; }
-input, textarea { width: 100%; padding: 10px 14px; border: 2px solid var(--border); border-radius: 8px; font-size: 13px; background: #f8fafc; }
-textarea { height: 160px; font-family: monospace; }
-.btn { width: 100%; padding: 12px; border-radius: 30px; font-weight: 700; cursor: pointer; border: none; font-size: 13px; text-align: center; background: var(--primary); color: #fff; }
-.page { width: 210mm; height: 297mm; background: #fff; padding: 12mm 15mm; box-sizing: border-box; box-shadow: 0 10px 40px rgba(0,0,0,0.1); position: relative; color: #000; display: flex; flex-direction: column; }
-.header { display: grid; grid-template-columns: 80px 1fr 140px; align-items: center; gap: 15px; border-bottom: 3px solid #000; padding-bottom: 12px; margin-bottom: 15px; }
-.logo-box { width: 70px; height: 70px; border: 1.5px dashed #ccc; display: flex; align-items: center; justify-content: center; font-size: 9px; border-radius: 8px; }
-.logo-box img { max-width: 100%; max-height: 100%; }
-.title-block { text-align: center; }
-.title-block h2 { font-family: 'Libre Baskerville', serif; font-size: 20px; margin: 0; }
-.title-block p { font-size: 11px; color: #444; margin: 4px 0 0; font-weight: 500; }
-.contact { text-align: right; font-size: 10px; line-height: 1.3; }
-.grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 10mm 12mm; flex-grow: 1; }
-.puzzle { display: flex; flex-direction: column; width: 100%; }
-.p-meta { display: flex; justify-content: space-between; font-weight: 900; font-size: 10px; border-bottom: 1.5px solid #000; margin-bottom: 3px; padding-bottom: 2px; }
-.board-wrap { width: 100%; aspect-ratio: 1/1; border: 1.5px solid #000; position: relative; }
-.board { display: grid; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr); width: 100%; height: 100%; }
-.square { display: flex; align-items: center; justify-content: center; position: relative; }
-.light { background: var(--board-light); }
-.dark { background: var(--board-dark); }
-.piece { width: 80%; height: 80%; background-size: contain; background-repeat: no-repeat; background-position: center; }
-.coord { position: absolute; font-size: 7px; font-weight: 900; z-index: 1; opacity: 0.7; font-family: sans-serif; }
-.coord.f { right: 1px; bottom: 0px; }
-.coord.r { left: 1px; top: 0px; }
-.light .coord { color: #333; }
-.dark .coord { color: #000; }
-.move-text { text-align: center; font-size: 9px; font-weight: 900; margin-top: 5px; padding: 3px; border: 1.5px solid #000; text-transform: uppercase; background: #fff; }
-.footer-ws { text-align: center; font-size: 9px; color: #999; border-top: 1px solid #eee; padding-top: 8px; margin-top: 5px; }
-
-@media print {
-  body { background: #fff !important; margin: 0; padding: 0; -webkit-print-color-adjust: exact; }
-  .sidebar { display: none !important; }
-  .app { display: block !important; }
-  .preview { padding: 0 !important; background: none !important; display: block !important; gap: 0 !important; }
-  .page { width: 210mm !important; height: 297mm !important; box-sizing: border-box !important; background: #fff !important; box-shadow: none !important; margin: 0 !important; padding: 8mm !important; page-break-after: always; display: flex !important; flex-direction: column !important; overflow: hidden !important; }
-  .header { flex-shrink: 0 !important; padding-bottom: 4px !important; margin-bottom: 4px !important; border-bottom: 2px solid #000 !important; }
-  .grid { display: grid !important; grid-template-columns: repeat(3, 61mm) !important; grid-template-rows: repeat(3, 61mm) !important; gap: 4mm !important; flex: 1 !important; align-content: start !important; }
-  .puzzle { display: flex !important; flex-direction: column !important; width: 61mm !important; page-break-inside: avoid; }
-  .p-meta { font-size: 7px !important; padding-bottom: 1px !important; margin-bottom: 1px !important; flex-shrink: 0 !important; }
-  .board-wrap { width: 61mm !important; height: 61mm !important; flex-shrink: 0 !important; border: 1.5px solid #000 !important; position: relative !important; display: block !important; overflow: hidden !important; }
-  .board { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; display: grid !important; grid-template-columns: repeat(8, 1fr) !important; grid-template-rows: repeat(8, 1fr) !important; }
-  .square { display: flex !important; align-items: center !important; justify-content: center !important; overflow: hidden !important; }
-  .move-text { font-size: 7px !important; margin-top: 2px !important; padding: 2px !important; flex-shrink: 0 !important; }
-  .piece { width: 80% !important; height: 80% !important; }
-  .coord { font-size: 4.5px !important; }
-  .dark { background-color: var(--board-dark) !important; }
-  .light { background-color: var(--board-light) !important; }
-  .footer-ws { display: none !important; }
-  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-}
-.board-wrapper { display: inline-block; margin: 10px; vertical-align: top; } .board { width: 200px; } .board-label { font-size: 12px; font-weight: 700; text-align: center; margin: 4px 0; } .board { box-shadow: 0 0 0 1px #ddd; } #boardContainer { padding: 20px; margin-top: 12px; } </style> <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chess Puzzle Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+  <style>
+    :root {
+      --primary: #0b6b6f;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .app {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      min-height: 100vh;
+    }
+    .sidebar {
+      background: #fff;
+      padding: 24px 18px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand h1 { font-family: 'Libre Baskerville', serif; font-size: 20px; margin: 0; color: var(--primary); }
+    label {
+      display: block;
+      font-weight: 700;
+      font-size: 11px;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+    }
+    textarea { height: 160px; font-family: monospace; resize: vertical; }
+    .btn {
+      width: 100%;
+      padding: 11px;
+      border-radius: 30px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      font-size: 13px;
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn:hover { background: #095357; }
+    .preview {
+      padding: 24px;
+      background: #e8edf2;
+      overflow-y: auto;
+    }
+    #boardContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .board-wrapper {
+      background: #fff;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .board-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .board { width: 200px !important; }
+    .error-fen {
+      color: #dc2626;
+      font-size: 12px;
+      padding: 6px 10px;
+      background: #fee2e2;
+      border-radius: 6px;
+    }
+  </style>
 </head>
 <body>
-<div class="app">
-  <div class="sidebar">
-    <div class="brand">
-      <svg viewBox="0 0 50 50" fill="currentColor"><path d="M25 2L8 12v10c0 10.5 7.3 20.3 17 22.8 9.7-2.5 17-12.3 17-22.8V12L25 2zm-3 32l-7-7 2.8-2.8L22 28.4l10.2-10.2L35 21 22 34z"/></svg>
-      <h1>EduChess</h1>
+  <div class="app">
+    <div class="sidebar">
+      <div class="brand">
+        <h1>EduChess</h1>
+      </div>
+
+      <div>
+        <label>Puzzle Category</label>
+        <select id="categoryMenu" onchange="if(this.value) loadFensArray(puzzles[this.value])">
+          <option value="">-- Select Category --</option>
+          <option value="mateInOne">Mate in 1</option>
+          <option value="mateInTwo">Mate in 2</option>
+          <option value="forks">Forks</option>
+          <option value="pins">Pins</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Custom FENs (one per line)</label>
+        <textarea id="fenInput" spellcheck="false" placeholder="Paste FENs here..."></textarea>
+        <button class="btn" id="loadCustomBtn" style="margin-top:10px;">Load FENs</button>
+      </div>
     </div>
-    <div>
-      <label>Title</label>
-      <input type="text" id="wsTitle" value="EduChess Academy Puzzle Worksheet">
+
+    <div class="preview">
+      <div id="boardContainer"></div>
     </div>
-    <div>
-      <label>Contact</label>
-      <input type="text" id="wsContact" value="+91 0000 0000 00">
-    </div>
-    <div>
-      <label>Sub-header</label>
-      <input type="text" id="wsSub" value="Solve the positions. White or Black to move is shown below each board.">
-    </div>
-    <div>
-      <label>Logo</label>
-      <input type="file" id="logoIn" accept="image/*">     </div>     <div>              <div style="display:flex;gap:8px;align-items:center;">       <label>Quick Load Puzzles:</label>       <select id="categoryMenu" onchange="loadCategory(this.value)">         <option value="">Select Category</option>         <option value="mateIn1">Mate in 1</option>       </select>       <input type="text" id="fenInput" placeholder="Or paste FEN" style="flex:1;">       <button onclick="loadFromInput()" class="btn">Load</button>     </div>     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">         <button class="btn" onclick="loadCategory('mateIn1')" style="padding:8px;font-size:11px;background:#16a34a;">Mate in 1</button>         <button class="btn" onclick="loadCategory('mateIn2')" style="padding:8px;font-size:11px;background:#2563eb;">Mate in 2</button>         <button class="btn" onclick="loadCategory('forks')" style="padding:8px;font-size:11px;background:#9333ea;">Forks</button>         <button class="btn" onclick="loadCategory('pins')" style="padding:8px;font-size:11px;background:#dc2626;">Pins</button>       </div>" accept="image/*">
-    </div>
-    <div>
-      <label>Puzzle Category</label>
-      <select id="categoryMenu" class="btn" style="background:#fff;color:#1e293b;border:2px solid #e2e8f0;"> <option value="">-- Select Puzzle Category --</option> <option value="mateInOne">Mate in 1</option> <option value="pins">Pins</option> <option value="forks">Forks</option> <option value="mateInTwo">Mate in 2</option> </select> <button id="loadCategoryBtn" class="btn" style="margin-top:8px;">Load Category</button> <label style="margin-top:16px;display:block;">Or Paste Custom FENs</label> <textarea id="fenInput" spellcheck="false" placeholder="Paste FENs here (one per line)">r1bqkbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R w KQkq - 2 4
-2r3k1/5ppp/p2b4/1p1P4/1P6/P3R1P1/5P1P/4R1K1 w - - 0 1</textarea>
-    </div>
-    <button class="btn" onclick="window.print()">Print Worksheet</button>
-    <button class="btn" id="loadCustomBtn" style="background:#666;">Load Custom FENs</button>
   </div>
-  <div class="preview" id="preview"></div> <div id="boardContainer"></div>
-</div>
-<script>
-const pieceImages = {
-  'K': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/wK.svg',
-  'Q': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/wQ.svg',
-  'R': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/wR.svg',
-  'B': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/wB.svg',
-  'N': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/wN.svg',
-  'P': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/wP.svg',
-  'k': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/bK.svg',
-  'q': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/bQ.svg',
-  'r': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/bR.svg',
-  'b': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/bB.svg',
-  'n': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/bN.svg',
-  'p': 'https://lichess1.org/assets/_Qa5Gev/piece/cburnett/bP.svg'
-};
-<input type=const puzzleCategories = {   mateIn1: `5rk1/5ppp/8/8/8/8/5PPP/4R1K1 w - - 0 1 6k1/5ppp/8/8/8/8/5PPP/5RK1 w - - 0 1 2r3k1/pp3ppp/8/8/8/8/PP3PPP/4R1K1 w - - 0 1 6k1/pp3ppp/8/8/8/8/PP3PPP/5RK1 w - - 0 1 3r2k1/pp3ppp/8/8/8/8/PP3PPP/4R1K1 w - - 0 1 4r1k1/pp3ppp/8/8/8/8/PP3PPP/4R1K1 w - - 0 1 5rk1/pp3ppp/8/8/8/8/PP3PPP/4R1K1 w - - 0 1 6k1/pp3ppp/8/8/8/8/PP3PPP/4RK1 w - - 0 1 5rkr/pp3ppp/8/8/8/8/PP3PPP/4R1K1 w - - 0 1 5rk1/pp3ppp/8/8/8/6Q1/PP3PPP/6K1 w - - 0 1 6k1/pp3ppp/8/8/8/5Q2/PP3PPP/6K1 w - - 0 1 r1bqk2r/pppp1Qpp/2n2n2/2b1p3/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 0 1 r4rk1/ppp2Qpp/2np4/2b1p3/2B1P3/8/PPPP1PPP/RNB1K2R w KQ - 0 1 r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP1QPPP/R1B2RK1 w - - 0 1 5rk1/ppp2ppp/3p4/4n3/4P3/5Q2/PPP2PPP/RNB2RK1 w - - 0 1 4r1k1/ppp2ppp/3p4/4n3/4P3/5Q2/PPP2PPP/RNB2RK1 w - - 0 1 6k1/ppp2ppp/3p4/4n3/4P3/5Q2/PPP2PPP/RNB2RK1 w - - 0 1 5rk1/ppp2Qpp/3p4/4n3/4P3/8/PPP2PPP/RNB2RK1 w - - 0 1 6k1/ppp2Qpp/3p4/4n3/4P3/8/PPP2PPP/RNB2RK1 w - - 0 1 5r1k/ppp2Qpp/3p4/4n3/4P3/8/PPP2PPP/RNB2RK1 w - - 0 1`,   mateIn2: `r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 0 1 r1b1kb1r/pppp1ppp/2n2q2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K2R w KQkq - 0 1 r2qkb1r/pp2nppp/3p4/2pNN1B1/2BnP3/3P4/PPP2PPP/R2bK2R w KQkq - 0 1 r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 1`,   forks: `rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1 r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1 rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1`,   pins: `rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1 r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1 rn1qkbnr/ppp1pppp/3p4/8/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 1` }; function loadCategory(cat) { const fens = puzzleCategories[cat]; if (!fens) return; document.getElementById('fens').value = fens.trim(); render(); } function loadFromInput() { const fen = document.getElementById('fenInput').value.trim(); if (!fen) return; const current = document.getElementById('fens').value.trim(); document.getElementById('fens').value = current ? current + '\n' + fen : fen; document.getElementById('fenInput').value = ''; render(); } let logoData = null;"file" id="logoIn" accept="image/*">     </div>     <div>       <label>Quick Load Puzzles</label>       <div style="display:flex;gap:8px;align-items:center;">       <label>Quick Load Puzzles:</label>       <select id="categoryMenu" onchange="loadCategory(this.value)">         <option value="">Select Category</option>         <option value="mateIn1">Mate in 1</option>       </select>       <input type="text" id="fenInput" placeholder="Or paste FEN" style="flex:1;">       <button onclick="loadFromInput()" class="btn">Load</button>     </div>     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">         <button class="btn" onclick="loadCategory('mateIn1')" style="padding:8px;font-size:11px;background:#16a34a;">Mate in 1</button>         <button class="btn" onclick="loadCategory('mateIn2')" style="padding:8px;font-size:11px;background:#2563eb;">Mate in 2</button>         <button class="btn" onclick="loadCategory('forks')" style="padding:8px;font-size:11px;background:#9333ea;">Forks</button>         <button class="btn" onclick="loadCategory('pins')" style="padding:8px;font-size:11px;background:#dc2626;">Pins</button>       </div>
 
-function chunkFens(fens, size = 9) {
-  const chunks = [];
-  for (let i = 0; i < fens.length; i += size) {
-    chunks.push(fens.slice(i, i + size));
-  }
-  return chunks;
-}
-
-function render() {
-  const title = document.getElementById('wsTitle').value;
-  const contact = document.getElementById('wsContact').value;
-  const sub = document.getElementById('wsSub').value;
-  const fensText = document.getElementById('fens').value;
-  
-  const lines = fensText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-  const fenChunks = chunkFens(lines);
-  
-  let html = '';
-  fenChunks.forEach((chunk, pageIndex) => {
-    html += '<div class="page">' +
-      '<div class="header">' +
-      '<div class="logo-box">' + (logoData ? '<img src="' + logoData + '">' : 'LOGO') + '</div>' +
-      '<div class="title-block"><h2>' + title + (fenChunks.length > 1 ? ' - Sheet ' + (pageIndex + 1) : '') + '</h2><p>' + sub + '</p></div>' +
-      '<div class="contact"><strong>Contact</strong><br>' + contact + '</div>' +
-      '</div>' +
-      '<div class="grid">' + chunk.map((f, i) => createPuzzle(f, pageIndex * 9 + i)).join('') + '</div>' +
-      '<div class="footer-ws">EduChess Academy Puzzle Worksheet • Sheet ' + (pageIndex + 1) + ' of ' + fenChunks.length + '</div>' +
-      '</div>';
-  });
-  
-  document.getElementById('preview').innerHTML = html;
-}
-
-function createPuzzle(fen, idx) {
-  const parts = fen.split(/\s+/);
-  const boardStr = parts[0];
-  const turn = parts[1] || 'w';
-  const rows = boardStr.split('/').map(r => {
-    const row = [];
-    for (const char of r) {
-      if (/\d/.test(char)) {
-        for (let i = 0; i < parseInt(char); i++) row.push('');
-      } else {
-        row.push(char);
-      }
-    }
-    return row;
-  });
-  let h = '<div class="puzzle">' +
-    '<div class="p-meta"><span>Puzzle ' + (idx + 1) + '</span><span>' + (turn === 'w' ? 'White' : 'Black') + ' to move</span></div>' +
-    '<div class="board-wrap"><div class="board">';
-  for (let r = 0; r < 8; r++) {
-    for (let c = 0; c < 8; c++) {
-      const isLight = (r + c) % 2 === 0;
-      const piece = rows[r][c];
-      h += '<div class="square ' + (isLight ? 'light' : 'dark') + '">';
-      if (piece && pieceImages[piece]) {
-        h += '<div class="piece" style="background-image: url(' + pieceImages[piece] + ')"></div>';
-      }
-      if (r === 7) h += '<span class="coord f">' + 'abcdefgh'[c] + '</span>';
-      if (c === 0) h += '<span class="coord r">' + (8 - r) + '</span>';
-      h += '</div>';
-    }
-  }
-  h += '</div></div><div class="move-text">' + (turn === 'w' ? 'White' : 'Black') + ' to move</div></div>';
-  return h;
-}
-
-function clearFens() {
-  document.getElementById('fens').value = '';
-  render();
-}
-
-document.querySelectorAll('input, textarea').forEach(el => el.addEventListener('input', render));
-document.getElementById('logoIn').addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => { logoData = reader.result; render(); };
-  reader.readAsDataURL(file);
-});
-render();
-</script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script> <script src="puzzles.js"></script> <script src="script.js"></script> </body>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+  <script src="puzzles.js"></script>
+  <script src="script.js"></script>
+</body>
 </html>

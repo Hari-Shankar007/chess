@@ -1,4 +1,3 @@
-// Basic FEN validator (checks 6 fields roughly)
 function isValidFEN(fen) {
   if (!fen || typeof fen !== 'string') return false;
   const parts = fen.trim().split(/\s+/);
@@ -59,15 +58,8 @@ function loadFensArray(fens) {
   });
 }
 
-// UI wiring
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('loadCategoryBtn').addEventListener('click', function() {
-    const sel = document.getElementById('categoryMenu').value;
-    if (!sel) { alert('Choose a category first'); return; }
-    const fens = puzzles[sel] || [];
-    loadFensArray(fens);
-  });
-
+  // Load FENs button (textarea)
   document.getElementById('loadCustomBtn').addEventListener('click', function() {
     const raw = document.getElementById('fenInput').value.trim();
     if (!raw) { alert('Paste FENs into the text area first'); return; }
