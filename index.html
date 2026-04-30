@@ -67,7 +67,7 @@ textarea { height: 160px; font-family: monospace; }
   .footer-ws { display: none !important; }
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 }
-.board-wrapper { display: inline-block; margin: 10px; vertical-align: top; } .board { width: 200px; } .board-label { font-size: 12px; font-weight: 700; text-align: center; margin: 4px 0; } #boardContainer { padding: 20px; } </style> <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+.board-wrapper { display: inline-block; margin: 10px; vertical-align: top; } .board { width: 200px; } .board-label { font-size: 12px; font-weight: 700; text-align: center; margin: 4px 0; } .board { box-shadow: 0 0 0 1px #ddd; } #boardContainer { padding: 20px; margin-top: 12px; } </style> <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
 </head>
 <body>
 <div class="app">
@@ -93,12 +93,12 @@ textarea { height: 160px; font-family: monospace; }
       <input type="file" id="logoIn" accept="image/*">     </div>     <div>              <div style="display:flex;gap:8px;align-items:center;">       <label>Quick Load Puzzles:</label>       <select id="categoryMenu" onchange="loadCategory(this.value)">         <option value="">Select Category</option>         <option value="mateIn1">Mate in 1</option>       </select>       <input type="text" id="fenInput" placeholder="Or paste FEN" style="flex:1;">       <button onclick="loadFromInput()" class="btn">Load</button>     </div>     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">         <button class="btn" onclick="loadCategory('mateIn1')" style="padding:8px;font-size:11px;background:#16a34a;">Mate in 1</button>         <button class="btn" onclick="loadCategory('mateIn2')" style="padding:8px;font-size:11px;background:#2563eb;">Mate in 2</button>         <button class="btn" onclick="loadCategory('forks')" style="padding:8px;font-size:11px;background:#9333ea;">Forks</button>         <button class="btn" onclick="loadCategory('pins')" style="padding:8px;font-size:11px;background:#dc2626;">Pins</button>       </div>" accept="image/*">
     </div>
     <div>
-      <label>FENs (unlimited, 9 per page)</label>
-      <textarea id="fens" spellcheck="false" placeholder="Paste FENs here...">r1bqkbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R w KQkq - 2 4
+      <label>Puzzle Category</label>
+      <select id="categoryMenu" class="btn" style="background:#fff;color:#1e293b;border:2px solid #e2e8f0;"> <option value="">-- Select Puzzle Category --</option> <option value="mateInOne">Mate in 1</option> <option value="pins">Pins</option> <option value="forks">Forks</option> <option value="mateInTwo">Mate in 2</option> </select> <button id="loadCategoryBtn" class="btn" style="margin-top:8px;">Load Category</button> <label style="margin-top:16px;display:block;">Or Paste Custom FENs</label> <textarea id="fenInput" spellcheck="false" placeholder="Paste FENs here (one per line)">r1bqkbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R w KQkq - 2 4
 2r3k1/5ppp/p2b4/1p1P4/1P6/P3R1P1/5P1P/4R1K1 w - - 0 1</textarea>
     </div>
     <button class="btn" onclick="window.print()">Print Worksheet</button>
-    <button class="btn" onclick="clearFens()" style="background:#666;">Clear FENs</button>
+    <button class="btn" id="loadCustomBtn" style="background:#666;">Load Custom FENs</button>
   </div>
   <div class="preview" id="preview"></div> <div id="boardContainer"></div>
 </div>
