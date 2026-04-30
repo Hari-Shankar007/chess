@@ -3,33 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chess Puzzle Viewer</title>
+  <title>Chess Worksheet Generator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
   <style>
     :root {
       --primary: #0b6b6f;
+      --primary-hover: #095357;
       --bg: #f8fafc;
-      --surface: #ffffff;
       --text: #1e293b;
       --text-muted: #64748b;
       --border: #e2e8f0;
-      --radius: 12px;
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.4;
-    }
-    .app {
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      min-height: 100vh;
-    }
+    * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.4; }
+    .app { display: grid; grid-template-columns: 300px 1fr; min-height: 100vh; }
     .sidebar {
       background: #fff;
       padding: 24px 18px;
@@ -37,20 +26,14 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      overflow-y: auto;
     }
     .brand { display: flex; align-items: center; gap: 10px; }
     .brand h1 { font-family: 'Libre Baskerville', serif; font-size: 20px; margin: 0; color: var(--primary); }
-    label {
-      display: block;
-      font-weight: 700;
-      font-size: 11px;
-      margin-bottom: 6px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-    select, textarea {
+    label { display: block; font-weight: 700; font-size: 11px; margin-bottom: 5px; color: var(--text-muted); text-transform: uppercase; }
+    input, select, textarea {
       width: 100%;
-      padding: 10px 12px;
+      padding: 9px 12px;
       border: 2px solid var(--border);
       border-radius: 8px;
       font-size: 13px;
@@ -58,7 +41,7 @@
       color: var(--text);
       font-family: inherit;
     }
-    textarea { height: 160px; font-family: monospace; resize: vertical; }
+    textarea { height: 140px; font-family: monospace; resize: vertical; }
     .btn {
       width: 100%;
       padding: 11px;
@@ -70,18 +53,9 @@
       background: var(--primary);
       color: #fff;
     }
-    .btn:hover { background: #095357; }
-    .preview {
-      padding: 24px;
-      background: #e8edf2;
-      overflow-y: auto;
-    }
-    #boardContainer {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-top: 8px;
-    }
+    .btn:hover { background: var(--primary-hover); }
+    .preview { padding: 24px; background: #dde3ea; overflow-y: auto; }
+    #boardContainer { display: flex; flex-wrap: wrap; gap: 16px; }
     .board-wrapper {
       background: #fff;
       border-radius: 10px;
@@ -91,29 +65,34 @@
       flex-direction: column;
       align-items: center;
     }
-    .board-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 6px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
+    .board-label { font-size: 11px; font-weight: 700; margin-bottom: 6px; color: var(--text-muted); text-transform: uppercase; }
     .board { width: 200px !important; }
-    .error-fen {
-      color: #dc2626;
-      font-size: 12px;
-      padding: 6px 10px;
-      background: #fee2e2;
-      border-radius: 6px;
+    .error-fen { color: #dc2626; font-size: 12px; padding: 6px 10px; background: #fee2e2; border-radius: 6px; }
+    @media print {
+      .sidebar { display: none !important; }
+      .app { display: block !important; }
+      .preview { background: none !important; padding: 0 !important; }
     }
   </style>
 </head>
 <body>
   <div class="app">
     <div class="sidebar">
-      <div class="brand">
-        <h1>EduChess</h1>
+      <div class="brand"><h1>EduChess</h1></div>
+
+      <div>
+        <label>Worksheet Title</label>
+        <input type="text" id="wsTitle" value="EduChess Academy Puzzle Worksheet">
+      </div>
+
+      <div>
+        <label>Contact / Phone</label>
+        <input type="text" id="wsContact" value="+91 0000 0000 00">
+      </div>
+
+      <div>
+        <label>Logo</label>
+        <input type="file" id="logoIn" accept="image/*">
       </div>
 
       <div>
@@ -132,6 +111,8 @@
         <textarea id="fenInput" spellcheck="false" placeholder="Paste FENs here..."></textarea>
         <button class="btn" id="loadCustomBtn" style="margin-top:10px;">Load FENs</button>
       </div>
+
+      <button class="btn" onclick="window.print()">Print Worksheet</button>
     </div>
 
     <div class="preview">
@@ -143,5 +124,15 @@
   <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
   <script src="puzzles.js"></script>
   <script src="script.js"></script>
+  <script>
+    let logoData = null;
+    document.getElementById('logoIn').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function() { logoData = reader.result; };
+      reader.readAsDataURL(file);
+    });
+  </script>
 </body>
 </html>
